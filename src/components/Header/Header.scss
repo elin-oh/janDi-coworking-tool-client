@@ -1,0 +1,48 @@
+/* your css code */
+
+.HeaderWrapper{
+  height:55px;
+  background-color: #B8B8B8;
+  display: flex;
+  
+}
+.logoWrapper{
+  display:flex;
+  align-items:center;
+  padding-left: 20px;
+  flex:1;
+  background-color: white;
+  height: 100%;
+}
+
+.headerLogo {
+  height:30px;
+}
+.headerLogo img{
+  height: 100%;
+}
+
+.menuBarWrap{
+  display:flex;
+  position:relative;
+  justify-content: flex-start;
+  align-items:center;
+  width:40px;
+  cursor: pointer;
+}
+.menuBarWrap:before{
+  display: inline-block;
+  content:'';
+  position:absolute;
+  left:-40px;
+  width:0px;
+  height:0px;
+  border-left:40px solid transparent;
+  /*border의 성질을 이용해 오른쪽테두리만 투명으로 만든다. */
+  border-top:55px solid #B8B8B8;
+}
+.menuBarWrap img{
+  position:relative;
+  left: 3px;
+  width:16px;
+}
