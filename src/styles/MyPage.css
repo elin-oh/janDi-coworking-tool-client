@@ -31,3 +31,19 @@
   right:5px;
 
 }
+
+:global .MyPage-graph{
+  margin-top:45px;
+}
+:global .MyPage-graph h3{
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+}
+
+:global .MyPage-graph h3 span{
+  color:#B8B8B8;
+  font-style: italic;
+  font-weight: bold;
+  
+}

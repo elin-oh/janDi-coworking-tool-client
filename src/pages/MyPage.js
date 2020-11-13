@@ -6,6 +6,7 @@ import styles from 'styles/MyPage.css';
 import MiniButton from 'components/MiniButton';
 import Popup from 'components/Popup';
 import Button from 'components/Button';
+import PersonalJandiGround from 'containers/PersonalJandiGround';
 
 const cx = classNames.bind(styles);
 
@@ -84,6 +85,13 @@ class Mypage extends Component {
                 </div>
               </li>
             </ul>
+            <div className="MyPage-graph">
+              <h3>
+                개인 성취율 그래프
+                <span>53/87</span>
+              </h3>
+              <PersonalJandiGround todoCount={[53, 87]} />
+            </div>
           </div>{/*App-contents*/}
           <Popup open={this.state.isPopupOpen} onClosePopup={this.onClosePopup.bind(this)}>
             <h3>비밀번호를 변경하시겠습니까?</h3>
