@@ -2,7 +2,7 @@
 .MiniButtonWrapper{
   position: absolute;
   top:50%;
-  margin-top:-16px;
+  margin-top:-20px;
   padding:9px 20px;
   background: #EBEDF0;
   font-size: 0.65rem;
@@ -12,4 +12,8 @@
 
 .MiniButtonWrapper:global.right{
   right:0;
+}
+
+.MiniButtonWrapper:global.posRel{
+  position: relative;
 }

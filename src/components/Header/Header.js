@@ -11,6 +11,16 @@ class Header extends Component {
       isMenuOpen: false
     }
   }
+  onOpenMenu() {
+    this.setState({
+      isMenuOpen: true
+    })
+  }
+  onCloseMenu() {
+    this.setState({
+      isMenuOpen: false
+    })
+  }
   render() {
     return (
       <header className={cx('HeaderWrapper')}>
@@ -19,12 +29,12 @@ class Header extends Component {
             < img src="/img/headerLogo.png" alt="잔디헤더로고" />
           </Link >
         </div>
-        <div className={cx('menuBarWrap')}>
+        <div className={cx('menuBarWrap')} onClick={this.onOpenMenu.bind(this)}>
           < img src="/img/menuBar.png" alt="메뉴바" />
         </div>
         {
           this.state.isMenuOpen ?
-            <Menu /> : null
+            <Menu onCloseMenu={this.onCloseMenu.bind(this)} /> : null
         }
 
 

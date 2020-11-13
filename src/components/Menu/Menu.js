@@ -11,9 +11,9 @@ const Menu = (props) => (
       <Link to="/mypage">마이페이지</Link>
     </li>
     <li>
-      <a href='#!' className="btnLogout">로그아웃</a>
+      <a className="btnLogout" href="/">로그아웃</a>
     </li>
-    <li className="btnClose" >
+    <li className="btnClose" onClick={props.onCloseMenu}>
       <img src="/img/btn_close.png" alt="메뉴닫기" />
     </li>
   </ul>

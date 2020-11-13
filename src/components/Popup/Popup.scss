@@ -1,0 +1,36 @@
+/* your css code */
+
+:global .PopupWrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  position:absolute;
+  top:50%;
+  width:90%;
+  height: 450px;
+  margin:0 5%;
+  margin-top: -225px;
+  padding:35px;
+  background: white;
+  border-radius: 5px;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px 1px rgba(0,0,0,.1);
+}
+:global .PopupWrapper .inputList{
+  margin-top: 40px;
+}
+:global .PopupWrapper .inputList li{
+  margin-bottom:25px;
+}
+
+:global .PopupWrapper .btnClosePopup{
+  width:40px;
+  position: absolute;
+  top:10px;
+  right:10px;
+}
+
+:global .PopupWrapper .btnClosePopup img{
+  width:100%;
+}
