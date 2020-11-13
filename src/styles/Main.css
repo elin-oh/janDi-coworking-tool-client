@@ -1,0 +1,12 @@
+:global .MainCreatePoject{
+  margin-top:40px;
+}
+:global .MainCreatePoject li{
+  margin-bottom: 15px;
+}
+:global .MainCreatePoject li .inputWrap{
+  margin-top:8px;
+}
+:global .MainCreatePoject .flexRow{
+  align-items: flex-end;
+}

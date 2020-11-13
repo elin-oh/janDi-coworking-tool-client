@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import './Popup.scss';
 
 class Popup extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   render() {
     // props에 open설정시 팝업 오픈

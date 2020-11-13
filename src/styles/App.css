@@ -37,6 +37,11 @@ select {
   overflow-y: auto;
 }
 
+:global .flexRow{
+  display:flex;
+  justify-content: center;
+}
+
 
 /*잔디Bg*/
 :global .jandiBg{
@@ -67,7 +72,14 @@ h3 {
   letter-spacing: -1.8px;
   font-weight: bold;
 }
+h4{
+  font-size: 1.2rem;
+  font-weight:bold;
+  letter-spacing: -1.8px;
+}
 
 input:read-only{
   color:#B8B8B8;
 }
+
+
