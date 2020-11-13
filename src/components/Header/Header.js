@@ -8,7 +8,7 @@ class Header extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isMenuOpen: true
+      isMenuOpen: false
     }
   }
   render() {
