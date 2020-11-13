@@ -3,8 +3,7 @@ import Header from 'components/Header';
 import Button from 'components/Button';
 import Popup from 'components/Popup';
 import MiniButton from 'components/MiniButton';
-// import classNames from 'classnames/bind';
-// import styles from '../styles/Main.css';
+import styles from '../styles/Main.css';
 import { getStartEndDate, generateJandi } from 'modules/generateDayBlock';
 
 // const cx = classNames.bind(styles);
@@ -14,7 +13,7 @@ class Main extends Component {
     super(props)
 
     this.state = {
-      isPopupOpen: false,
+      isPopupOpen: true,
       todoList: [
         //projectA 에 해당되는 투두리스트 목록
         {
@@ -90,15 +89,31 @@ class Main extends Component {
                 </li>
                 <li>
                   <h4>멤버 초대</h4>
-                  <div className="flexRow">
+                  <div className="flex justCen alignEnd">
                     <div className="inputWrap">
                       <input placeholder="name" />
                     </div>
                     <MiniButton classList={['posRel']}>초대</MiniButton>
                   </div>
 
+                  <ul className="addedMemberList">
+                    <li className="flex">
+                      <span>test@test.com</span>
+                      <img src="/img/btn_delete_member.png" alt="멤버 삭제" className="btnDelete" />
+                    </li>
+                    <li className="flex">
+                      <span>test@test.com</span>
+                      <img src="/img/btn_delete_member.png" alt="멤버 삭제" className="btnDelete" />
+                    </li>
+                    <li className="flex">
+                      <span>test@test.com</span>
+                      <img src="/img/btn_delete_member.png" alt="멤버 삭제" className="btnDelete" />
+                    </li>
+                  </ul>
+                  <Button>프로젝트 생성하기</Button>
                 </li>
               </ul>
+
 
             </Popup>
           ) : null}
