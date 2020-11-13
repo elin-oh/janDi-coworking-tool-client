@@ -16,7 +16,7 @@ function setStartDay() {
 
   year--;
 
-  //작년의 월요일
+  //작년의 일요일
   let lastYearToday = new Date(`${year}-${month}-${date}`);
   let day = lastYearToday.getDay();
 
@@ -50,14 +50,31 @@ for (let i = 0; i < 12; i++) {
   dayList.push(lastDate);
 }
 
-export const getLastDayList = function () {
-  return dayList;
-}
 
-export const getStartEndDate = function () {
-  return [startDate, endDate];
-}
 
-export const generateJandi = function (todoList) {
-  console.log(todoList);
+export const generateJandi = function () {
+  let totalDayList = [];
+  let start = new Date(startDate);
+  let year = start.getFullYear();
+  let month = start.getMonth() + 1;
+  let date = start.getDate();
+
+  let pointer = 0;
+  while (endDate !== `${year}-${month}-${date}`) {
+    if (date >= dayList[pointer]) {
+      if (month >= 12) {
+        year++;
+        month = 1;
+        date = 1;
+      } else {
+        month++;
+        date = 1;
+      }
+      pointer++;
+    } else {
+      date++;
+    }
+    totalDayList.push(`${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`);
+  }
+  return totalDayList;
 }

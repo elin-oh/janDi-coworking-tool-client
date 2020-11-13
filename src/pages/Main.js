@@ -3,47 +3,41 @@ import Header from 'components/Header';
 import Button from 'components/Button';
 import Popup from 'components/Popup';
 import MiniButton from 'components/MiniButton';
+import JandiGround from 'containers/JandiGround';
 import styles from '../styles/Main.css';
-import { getStartEndDate, generateJandi } from 'modules/generateDayBlock';
+
 
 // const cx = classNames.bind(styles);
 
 class Main extends Component {
   constructor(props) {
     super(props)
-
+    this.jandiEl = [];
     this.state = {
-      isPopupOpen: true,
-      todoList: [
-        //projectA 에 해당되는 투두리스트 목록
+      isPopupOpen: false,
+      todoLists: [
         {
-          title: 'ProjectA',
-          todoList: [
-            {
-              date: "2020-10-30",
-              count: 7
-            }
-          ]
+          id: 2,
+          title: 'ProjectB'
         },
-        //projectB 에 해당되는 투두리스트 목록
         {
-          title: 'ProjectB',
-          todoList: [
-            {
-              date: "2020-10-30",
-              count: 7
-            }
-          ]
+          id: 3,
+          title: 'ProjectA'
+        },
+        {
+          id: 4,
+          title: 'ProjectC'
         }
       ]
     }
   }
 
   componentDidMount() {
-    //시작주 일요일에 해당되는 날짜, 오늘날짜를 불러온다
-    let [startDate, endDate] = getStartEndDate();
-    generateJandi(this.state.todoList);
-    console.log(startDate, endDate);
+    console.log(this.element)
+    for (let el of this.state.todoLists) {
+      this.jandiEl[el.id].scrollLeft = this.jandiEl[el.id].scrollWidth - this.jandiEl[el.id].offsetWidth;
+    }
+
   }
 
   onOpenPopup() {
@@ -56,7 +50,9 @@ class Main extends Component {
       isPopupOpen: false
     })
   }
+  handleScroll(e) {
 
+  }
 
   render() {
     return (
@@ -69,11 +65,20 @@ class Main extends Component {
               <Button >프로젝트 생성하기</Button>
             </div>
 
-            <ul>
+            <ul className="Main-projectList" onScroll={this.handleScroll.bind(this)}>
               {
-
+                this.state.todoLists.map(item => (
+                  <li key={item.id} >
+                    <h4>{item.title}</h4>
+                    <div className="Main-JandiGround" ref={(el) => { this.jandiEl[item.id] = el }} >
+                      <JandiGround title={item.tile} />
+                    </div>
+                  </li>
+                ))
               }
             </ul>
+
+
           </div>{/* App-contents */}
 
           {this.state.isPopupOpen ? (
@@ -113,8 +118,6 @@ class Main extends Component {
                   <Button>프로젝트 생성하기</Button>
                 </li>
               </ul>
-
-
             </Popup>
           ) : null}
 
