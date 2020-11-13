@@ -9,14 +9,15 @@
   width:70px;
   color: #b8B8B8;
 }
-.Mypage-userInfo li :global .inputWrap{
+
+:global .inputWrap{
   flex:1;
   position: relative;
   padding-right: 15px;
   padding-bottom: 7px;
   border-bottom: 1px solid #707070;
 }
-.Mypage-userInfo li :global .inputWrap input{
+:global .inputWrap input {
   width:100%;
   box-sizing: border-box;
   height: 100%;
