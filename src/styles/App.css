@@ -58,6 +58,13 @@ h2{
   letter-spacing: -1px;
   font-weight: bold;
 }
+h3 {
+  width:100%;
+  text-align:center;
+  font-size: 1.2rem;
+  letter-spacing: -1.8px;
+  font-weight: bold;
+}
 
 input:read-only{
   color:#B8B8B8;
