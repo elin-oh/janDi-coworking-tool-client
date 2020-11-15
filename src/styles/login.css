@@ -1,10 +1,11 @@
 
-img{
+:global .loginLogo {
   display: block;
   margin: auto;
+  padding-top: 100px;
 }
-
 .login-userInfo{
+  padding-top: 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,20 +25,28 @@ img{
   position: relative;
   padding-right: 15px;
   padding-bottom: 7px;
-  border-bottom: 1px solid #707070;
 }
-.login-userInfo li :global .inputWrap input{
+.login-userInfo li :global {
   width:100%;
   box-sizing: border-box;
   height: 100%;
   border: none;
   font-size: 1rem;
 }
-
 .login-userInfo li :global .btnModify{
   position: absolute;
-  top:2px;
+  top:px;
   right:5px;
 
 }
-
+:global .goToSignUp {
+  font-size: 1000;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+:global .goToSignUp  p {
+  font-size: 12pt;
+  padding-bottom: 10px;
+}
