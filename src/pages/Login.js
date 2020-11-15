@@ -10,8 +10,8 @@ const cx = classNames.bind(styles);
 
 
 class Login extends Component {
-    constructor(props) {
-        super(props)
+  constructor(props) {
+    super(props)
 
         this.state = {
             userId: "",
@@ -77,8 +77,24 @@ class Login extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
-        );
-    }
+              </li>
+              <li>
+                <div className="inputWrap">
+                  <input type="password" placeholder="비밀번호를 입력하세요" />
+                </div>
+              </li>
+              <button className='btn btn-login' type='submit' onClick={this.handleLogin}>
+                로그인
+                            </button>
+              {<div className="alert-box">{this.state.errorMessage}</div>}
+              <div className="inputWrap">
+                <Link to="/signUp">계정이 없으신가요?</Link>
+              </div>
+            </ul>
+          </div>
+        </div>
+      </div >
+    );
+  }
 }
 export default Login;

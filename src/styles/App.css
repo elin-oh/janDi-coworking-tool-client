@@ -4,6 +4,7 @@ html,body{
   font-size: 16px;
 }
 
+input,
 input[type="text"],
 input[type="password"],
 textarea,
@@ -19,6 +20,7 @@ select {
   justify-content: center;
   align-items: center;
   background-color:#ECECEC;
+  overflow:hidden;
 }
 
 :global .mb-view {
@@ -38,11 +40,20 @@ select {
   overflow-y: auto;
 }
 
-:global .flexRow{
+:global .flex{
   display:flex;
+}
+:global .flex.col{
+  flex-direction: column;
+}
+:global .flex.justCen{
   justify-content: center;
 }
 
+
+:global .flex.alignEnd{
+  align-items: flex-end;
+}
 
 /*잔디Bg*/
 :global .jandiBg{
@@ -74,6 +85,8 @@ h3 {
   font-weight: bold;
 }
 h4{
+  font-family: 'Noto Sans KR',
+  sans-serif;
   font-size: 1.2rem;
   font-weight:bold;
   letter-spacing: -1.8px;
@@ -84,3 +97,31 @@ input:read-only{
 }
 
 
+/* Chrome, Safari용 스크롤 바 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  border: 3px solid #fff;
+}
+
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment {
+  display: block;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #efefef;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 4px rgba(0, 0, 0, .2)
+}
+
+::-webkit-scrollbar-thumb {
+  height: 40px;
+  width: 40px;
+  background: rgba(0, 0, 0, .2);
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-box-shadow: inset 0 0 4px rgba(0, 0, 0, .1)
+}
