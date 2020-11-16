@@ -1,16 +1,31 @@
+:global .App-contents.login {
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+}
 
 :global .loginLogo {
   display: block;
-  margin: auto;
-  padding-top: 100px;
+  display: inline-block;
+  width:120px;
+  margin:0 auto;
+  padding: 30px 0 30px;
 }
+:global .App-contents.login h2{
+  padding-top: 0;
+  font-size: 1rem;
+  color:rgb(40, 179, 81);
+}
+
 .login-userInfo{
   padding-top: 0px;
   display: flex;
   flex-direction: column;
+  margin-top: 30px;
 }
 .login-userInfo li{
   display: flex;
+  flex-direction: column;
   margin-bottom: 15px;
 }
 .login-userInfo li label link{
@@ -38,6 +53,13 @@
   right:5px;
 
 }
+.login-userInfo :global .warning_text{
+  margin-top: 15px;
+}
+.btnLogin {
+  padding-top: 20px;
+}
+
 :global .goToSignUp {
   font-size: 1000;
   padding-top: 10px;
@@ -45,7 +67,20 @@
   flex-direction: column;
   align-items: center;
 }
+
+
+
 :global .goToSignUp  p {
   font-size: 12pt;
   padding-bottom: 10px;
+}
+
+:global .goToSignUp span{
+  color: #b8B8B8;
+  letter-spacing: -1px;
+}
+
+
+:global .goToSignUp span:hover{
+  text-decoration: underline;
 }
