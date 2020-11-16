@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
 import styles from 'styles/Login.css';
 import { Link } from 'react-router-dom';
-import Button from 'components/Button'
+import Button from 'components/Button';
+import axios from 'axios';
+import { setUser } from 'actions';
 //import Fblogin from 'components/Fblogin' 페이스북 로그인
 
 const cx = classNames.bind(styles);
@@ -18,7 +21,10 @@ class Login extends Component {
   }
 
   handleInputValue = (key) => (e) => {
-    this.setState({ [key]: e.target.value });
+    this.setState({
+      [key]: e.target.value,
+      errorMessage: ""
+    });
 
   };
 
@@ -26,11 +32,29 @@ class Login extends Component {
     const { userId, password } = this.state;
     // const { handleResponseSuccess } = this.props;
     if (!userId || !password) {
-      console.log("====================", this.state)
-      this.setState({ errorMessage: "아이디 또는 비밀번호를 입력하세요." })
+      //console.log("====================", this.state)
+      this.setState({
+        errorMessage: "아이디 또는 비밀번호를 입력하세요."
+      })
     } else {
-      console.log("====================", this.state)
-      //this.props.history.push("/Mypage")
+      //console.log("====================", this.state)
+      axios.post('http://localhost:5000/login', {
+        email: userId,
+        password
+      }).then(res => {
+        console.log(res);
+        let passLen = password.length;
+        this.props.setUser(userId, passLen);
+        this.props.history.push("/Mypage");
+      }).catch(error => {
+        if (error.response && error.response.status === 404) {
+          this.setState({
+            errorMessage: "존재하지 않는 사용자거나 또는 비밀번호가 틀렸습니다"
+          })
+        }
+        console.log(error);
+      })
+
     }
   };
 
@@ -72,4 +96,14 @@ class Login extends Component {
     );
   }
 }
-export default Login;
+
+const mapStateToProps = (state) => ({
+  // works: state.workReducer.works,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  // loadWork: (id) => { return dispatch(loadWork(id)) }
+  setUser: (email, passLen) => dispatch(setUser(email, passLen))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

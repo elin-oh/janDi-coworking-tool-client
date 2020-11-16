@@ -9,7 +9,8 @@ function userController(state = initialState, action) {
     case types.SET_USER:
       return {
         ...state,
-        test: !action.value
+        email: action.email,
+        passLen: action.passLen
       };
     default:
       return state;

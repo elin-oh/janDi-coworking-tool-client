@@ -54,10 +54,10 @@
 
 }
 .login-userInfo :global .warning_text{
-  margin-top: 5px;
+  margin-top: 15px;
 }
 .btnLogin {
-  padding-top: 30px;
+  padding-top: 20px;
 }
 
 :global .goToSignUp {
