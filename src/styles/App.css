@@ -96,6 +96,17 @@ input:read-only{
   color:#B8B8B8;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+input::placeholder{
+  color:#B8B8B8;
+}
+
 
 /* Chrome, Safari용 스크롤 바 */
 ::-webkit-scrollbar {
@@ -124,4 +135,20 @@ input:read-only{
   -webkit-border-radius: 8px;
   border-radius: 8px;
   -webkit-box-shadow: inset 0 0 4px rgba(0, 0, 0, .1)
+}
+
+
+:global .warning_text{
+  position: relative;
+  font-size: 0.9rem;
+  color:#E86662;
+  padding-left: 10px;
+}
+
+:global .warning_text:before{
+  content: '*';
+  display: flex;
+  position: absolute;
+  left: 0px;
+  align-items: center;
 }
