@@ -45,7 +45,7 @@ class Login extends Component {
         console.log(res);
         let passLen = password.length;
         this.props.setUser(userId, passLen);
-        this.props.history.push("/Mypage");
+        this.props.history.push("/");
       }).catch(error => {
         if (error.response && error.response.status === 404) {
           this.setState({
