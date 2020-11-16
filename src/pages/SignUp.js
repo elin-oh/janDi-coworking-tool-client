@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Button from 'components/Button';
 import classNames from 'classnames/bind';
 import styles from 'styles/SignUp.css';
-
+import axios from 'axios';
 const cx = classNames.bind(styles);
 
 class Signup extends Component {
@@ -28,6 +28,47 @@ class Signup extends Component {
       [name]: value
     })
   }
+
+  //submit signup
+  onSubmitSignup() {
+    let { email, userName, password, passwordCheck } = this.state;
+    if (this.validateForm()) {
+      //validate 통과시
+      axios
+        .post('http://localhost:5000/userpost', {
+          email,
+          userName,
+          password
+        }).then(res => {
+          if (res.status === 201 || res.status === 200) {
+            this.props.history.push('/login');
+          }
+        }).catch((error) => {
+          if (error.response.status) {
+            this.setState({
+              validateMsg: '이미 가입한 사용자입니다'
+            })
+          }
+        });
+    }
+  }
+
+  validateForm() {
+    let { email, userName, password, passwordCheck } = this.state;
+
+    if (email === "" || userName === "" || password === "" || passwordCheck === "") {
+      this.setState({
+        validateMsg: "모든 항목을 빠짐없이 입력해주세요"
+      });
+    } else if (passwordCheck !== password) {
+      this.setState({
+        validateMsg: "비밀번호와 비밀번호 확인은 동일해야 합니다"
+      });
+    } else {
+      return true;
+    }
+  }
+
   render() {
     return (
       <div className="App-wrap">
@@ -63,7 +104,7 @@ class Signup extends Component {
             </ul>
 
             <ul className={cx('btn_list')}>
-              <li>
+              <li onClick={this.onSubmitSignup.bind(this)}>
                 <Button>가입하기</Button>
               </li>
               <li className={cx('text')}>
