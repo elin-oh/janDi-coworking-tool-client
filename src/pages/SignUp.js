@@ -78,7 +78,7 @@ class Signup extends Component {
               <li>
                 <Button bgColor="#ECECEC" color="black">
                   <img src="/img/ico_google.png" alt="페이스북" className="icoImg" />
-                  Goolge로 가입
+                  Google로 가입
                 </Button>
               </li>
             </ul>
