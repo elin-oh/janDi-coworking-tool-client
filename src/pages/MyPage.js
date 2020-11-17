@@ -22,10 +22,13 @@ class Mypage extends Component {
       input: {
         email: props.email,
         passLen: props.passLen,
-        userName: props.userName
+        userName: props.userName,
+        currentPass: '',
+        changePass: '',
+        changePassCheck: ''
       },
       todoDoneCount: 0,
-      todoTotalCount: 0
+      todoTotalCount: 0,
     }
   }
 
@@ -37,13 +40,14 @@ class Mypage extends Component {
       this.props.history.push('/login')
     }
     axios.get('http://localhost:5000/userinfo', { withCredentials: true }).then(res => {
-      console.log(res.data);
-      let { todoDoneCount, todoTotalCount } = res.data.todolists[0];
-      this.props.setCount(todoDoneCount, todoTotalCount);
-      this.setState({
-        todoDoneCount: todoDoneCount,
-        todoTotalCount: todoTotalCount
-      })
+      if (res.data.todolists[0]) {
+        let { todoDoneCount, todoTotalCount } = res.data.todolists[0];
+        this.props.setCount(todoDoneCount, todoTotalCount);
+        this.setState({
+          todoDoneCount: todoDoneCount,
+          todoTotalCount: todoTotalCount
+        })
+      }
     })
 
   }
@@ -81,6 +85,13 @@ class Mypage extends Component {
           userName: value
         }
       })
+    } else {
+      this.setState({
+        input: {
+          ...this.state.input,
+          [name]: value
+        }
+      })
     }
   }
   onOpenPopup(e) {
@@ -92,6 +103,28 @@ class Mypage extends Component {
     this.setState({
       isPopupOpen: false
     })
+  }
+  submitPassword() {
+    let { changePass, changePassCheck, currentPass } = this.state.input;
+    if (!changePass || !changePassCheck || !currentPass) {
+      console.log('모든 란을 다 입력해주세요')
+    } else if (currentPass === changePass) {
+      console.log('변경할 비밀번호가 현재 비밀번호와 같습니다')
+    } else if (changePass !== changePassCheck) {
+      console.log('변경할 비밀번호와 비밀번호 확인은 같아야합니다');
+    } else {
+      axios.put('http://localhost:5000/userchange', {
+        currentPassword: currentPass,
+        newPassword: changePass
+      }, { withCredentials: true }).then(res => {
+        let { email, userName } = this.state.input;
+        let passLen = changePass.length;
+        this.props.setUser(email, passLen, userName);
+        this.setState((prevState) => ({
+          isReadonlyUserName: !prevState.isReadonlyUserName
+        }))
+      })
+    }
   }
 
   render() {
@@ -146,21 +179,23 @@ class Mypage extends Component {
             <ul className="inputList">
               <li>
                 <div className="inputWrap">
-                  <input type="password" placeholder="현재 비밀번호" />
+                  <input type="password" placeholder="현재 비밀번호" value={this.state.input.currentPass} name="currentPass" onChange={this.changeInput.bind(this)} />
                 </div>
               </li>
               <li>
                 <div className="inputWrap">
-                  <input type="password" placeholder="변경할 비밀번호" />
+                  <input type="password" placeholder="변경할 비밀번호" value={this.state.input.changePass} name="changePass" onChange={this.changeInput.bind(this)} />
                 </div>
               </li>
               <li>
                 <div className="inputWrap">
-                  <input type="password" placeholder="비밀번호 확인" />
+                  <input type="password" placeholder="비밀번호 확인" value={this.state.input.changePassCheck} name="changePassCheck" onChange={this.changeInput.bind(this)} />
                 </div>
               </li>
             </ul>
-            <Button bgColor="#FF9300" mdSize>비밀번호 변경하기</Button>
+            <div onClick={this.submitPassword.bind(this)}>
+              <Button bgColor="#FF9300" mdSize>비밀번호 변경하기</Button>
+            </div>
           </Popup>
         </div>{/*mb-view */}
       </div >
