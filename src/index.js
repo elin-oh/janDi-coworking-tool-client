@@ -6,26 +6,39 @@ import { CookiesProvider } from 'react-cookie';
 import { BrowserRouter } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
-import reducer from './reducers';
 import { Provider } from 'react-redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import rootReducer from './reducers';
+import { PersistGate } from 'redux-persist/integration/react'
 import * as serviceWorker from './serviceWorker';
+
+const persistConfig = {
+  key: 'root',
+  storage,
+}
 
 const composeEnhancers = composeWithDevTools({
   // options like actionSanitizer, stateSanitizer
 });
 
-const store = createStore(reducer, /* preloadedState, */ composeEnhancers(
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+const store = createStore(persistedReducer, /* preloadedState, */ composeEnhancers(
   applyMiddleware(),
 ));
+let persistor = persistStore(store);
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <CookiesProvider>
-        <App />
-      </CookiesProvider>
-    </BrowserRouter>
-  </Provider>,
+    <PersistGate loading={null} persistor={persistor}>
+      <BrowserRouter>
+        <CookiesProvider>
+          <App />
+        </CookiesProvider>
+      </BrowserRouter>
+    </PersistGate>
+  </Provider >,
   document.getElementById('root')
 );
 
