@@ -45,9 +45,10 @@ class Login extends Component {
         email: emailId,
         password
       }, { withCredentials: true }).then(res => {
+        console.log(res.data);
         let passLen = password.length;
         cookies.set('userId', res.data.id, { path: ' / ' });
-        this.props.setUser(emailId, passLen);
+        this.props.setUser(emailId, passLen, res.data.userName);
         this.props.history.push("/");
       }).catch(error => {
         if (error.response && error.response.status === 404) {
