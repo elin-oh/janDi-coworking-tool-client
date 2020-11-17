@@ -1,20 +1,16 @@
 import * as types from '../actions/ActionTypes';
 
 const initialState = {
-  email: "",
-  passLen: 0,
-  userName: ""
+  projects: []
 };
 
 function projectsController(state = initialState, action) {
   // 레퍼런스 생성
   switch (action.type) {
-    case types.SET_USER:
+    case types.SET_PROJECTS:
       return {
         ...state,
-        email: action.email,
-        passLen: action.passLen,
-        userName: action.userName
+        projects: action.projectLists
       };
     default:
       return state;

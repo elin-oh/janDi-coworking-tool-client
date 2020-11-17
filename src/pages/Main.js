@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Header from 'components/Header';
 import Button from 'components/Button';
 import Popup from 'components/Popup';
@@ -7,6 +9,7 @@ import JandiGround from 'containers/JandiGround';
 import axios from 'axios'
 import styles from '../styles/Main.css';
 import { server_path } from 'modules/path.js';
+import { setProjects } from 'actions';
 // const cx = classNames.bind(styles);
 
 class Main extends Component {
@@ -15,27 +18,14 @@ class Main extends Component {
     this.jandiEl = [];
     this.state = {
       isPopupOpen: false,
-      todoLists: [
-        {
-          id: 2,
-          title: 'ProjectB'
-        },
-        {
-          id: 3,
-          title: 'ProjectA'
-        },
-        {
-          id: 4,
-          title: 'ProjectC'
-        }
-      ]
+      todoLists: []
     }
   }
 
   componentDidMount() {
 
     axios.get(server_path + '/main', { withCredentials: true }).then(res => {
-      console.log(res.data);
+      this.props.setProjects(res.data);
     })
 
     //스크롤조정
@@ -55,9 +45,6 @@ class Main extends Component {
       isPopupOpen: false
     })
   }
-  handleScroll(e) {
-
-  }
 
 
 
@@ -72,14 +59,16 @@ class Main extends Component {
               <Button >프로젝트 생성하기</Button>
             </div>
 
-            <ul className="Main-projectList" onScroll={this.handleScroll.bind(this)}>
+            <ul className="Main-projectList" >
               {
-                this.state.todoLists.map(item => (
+                this.props.projects.map(item => (
                   <li key={item.id} >
-                    <h4>{item.title}</h4>
-                    <div className="Main-JandiGround" ref={(el) => { this.jandiEl[item.id] = el }} >
-                      <JandiGround title={item.tile} />
-                    </div>
+                    <Link to={`/projectmake/${item.id}`}>
+                      <h4>{item.projectName}</h4>
+                      <div className="Main-JandiGround" ref={(el) => { this.jandiEl[item.id] = el }} >
+                        <JandiGround title={item.tile} />
+                      </div>
+                    </Link>
                   </li>
                 ))
               }
@@ -134,4 +123,13 @@ class Main extends Component {
   }
 }
 
-export default Main;
+const mapStateToProps = (state) => ({
+  // works: state.workReducer.works,
+  projects: state.projectsReducer.projects
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setProjects: (projectLists) => dispatch(setProjects(projectLists))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
