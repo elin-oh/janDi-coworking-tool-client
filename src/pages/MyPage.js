@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Header from 'components/Header';
-
+import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
 import styles from 'styles/MyPage.css';
 import MiniButton from 'components/MiniButton';
@@ -9,18 +9,38 @@ import Button from 'components/Button';
 import PersonalJandiGround from 'containers/PersonalJandiGround';
 
 const cx = classNames.bind(styles);
-
-
 class Mypage extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
       isReadonlyUserName: true,
-      inputNickName: 'David123',
-      isPopupOpen: false
+      inputNickName: '',
+      isPopupOpen: false,
+      input: {
+        password: ''
+      }
     }
   }
+
+  componentDidMount() {
+
+    //user 정보가 없으면 리다이렉트
+    if (!this.props.email) {
+      this.props.history.push('/login')
+    }
+
+    let password = '';
+    for (let i = 0; i < this.props.passLen; i++) {
+      password += 'p'
+    }
+    this.setState({
+      input: {
+        password
+      }
+    })
+  }
+
 
   modifyNickName(e) {
     this.setState((prevState) => ({
@@ -62,7 +82,7 @@ class Mypage extends Component {
               <li>
                 <label>이메일</label>
                 <div className="inputWrap">
-                  test@test.com
+                  <input type="test" value="test@test.com" readOnly />
                 </div>
               </li>
               <li>
@@ -120,4 +140,14 @@ class Mypage extends Component {
     );
   }
 }
-export default Mypage;
+const mapStateToProps = (state) => ({
+  // works: state.workReducer.works,
+  email: state.userReducer.email,
+  passLen: state.userReducer.passLen
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  // loadWork: (id) => { return dispatch(loadWork(id)) }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Mypage);

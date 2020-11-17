@@ -33,7 +33,6 @@ class Main extends Component {
   }
 
   componentDidMount() {
-    console.log(this.element)
     for (let el of this.state.todoLists) {
       this.jandiEl[el.id].scrollLeft = this.jandiEl[el.id].scrollWidth - this.jandiEl[el.id].offsetWidth;
     }
