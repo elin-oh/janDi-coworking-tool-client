@@ -34,9 +34,8 @@ class Mypage extends Component {
   }
 
   componentDidMount() {
-    let { cookies } = this.props.cookies;
     //user 정보가 없으면 리다이렉트
-
+    let { cookies } = this.props.cookies;
     if (!cookies.userId) {
       this.props.history.push('/login')
     }
