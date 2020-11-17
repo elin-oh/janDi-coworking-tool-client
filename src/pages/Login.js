@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import Button from 'components/Button';
 import axios from 'axios';
 import { setUser } from 'actions';
+import { server_path } from 'modules/path.js';
 
 //import Fblogin from 'components/Fblogin' 페이스북 로그인
 
@@ -40,13 +41,12 @@ class Login extends Component {
       })
     } else {
       //console.log("====================", this.state)
-      axios.post('http://localhost:5000/login', {
+      axios.post(server_path, {
         email: emailId,
         password
       }, { withCredentials: true }).then(res => {
         let passLen = password.length;
         cookies.set('userId', res.data.id, { path: '/' });
-        console.log(emailId, passLen, res.data.userName);
         this.props.setUser(emailId, passLen, res.data.userName);
         this.props.history.push("/");
       }).catch(error => {

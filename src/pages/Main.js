@@ -6,8 +6,8 @@ import MiniButton from 'components/MiniButton';
 import JandiGround from 'containers/JandiGround';
 import axios from 'axios'
 import styles from '../styles/Main.css';
-
-
+import axios from 'axios';
+import { server_path } from 'modules/path.js';
 // const cx = classNames.bind(styles);
 
 class Main extends Component {
@@ -34,6 +34,12 @@ class Main extends Component {
   }
 
   componentDidMount() {
+
+    axios.get(server_path + '/main', { withCredentials: true }).then(res => {
+      console.log(res.data);
+    })
+
+    //스크롤조정
     for (let el of this.state.todoLists) {
       this.jandiEl[el.id].scrollLeft = this.jandiEl[el.id].scrollWidth - this.jandiEl[el.id].offsetWidth;
     }
