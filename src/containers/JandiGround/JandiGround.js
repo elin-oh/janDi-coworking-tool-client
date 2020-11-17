@@ -26,12 +26,11 @@ class JandiGround extends PureComponent {
         {
           this.state.jandiDay &&
           this.state.jandiDay.map(item => {
-            if (this.props.todoLists[item]) {
+            if (this.props.todoLists && this.props.todoLists[item]) {
               return (<JandiHana dataKey={item} key={item} count={this.props.todoLists[item]} />)
             } else {
               return (<JandiHana dataKey={item} key={item} />)
             }
-
           })
         }
       </div>
