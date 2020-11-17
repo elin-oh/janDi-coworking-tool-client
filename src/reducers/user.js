@@ -1,6 +1,9 @@
 import * as types from '../actions/ActionTypes';
 
 const initialState = {
+  email: "",
+  passLen: 0,
+  userName: ""
 };
 
 function userController(state = initialState, action) {
@@ -10,7 +13,8 @@ function userController(state = initialState, action) {
       return {
         ...state,
         email: action.email,
-        passLen: action.passLen
+        passLen: action.passLen,
+        userName: action.userName
       };
     default:
       return state;
