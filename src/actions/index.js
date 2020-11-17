@@ -9,3 +9,11 @@ export const setUser = (email, passLen, userName) => ({
     userName
 });
 
+
+export const setCount = (todoDoneCount, todoTotalCount) => {
+    return ({
+        type: types.SET_COUNT,
+        todoDoneCount,
+        todoTotalCount
+    })
+};

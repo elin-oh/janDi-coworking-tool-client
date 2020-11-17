@@ -9,46 +9,43 @@ import Button from 'components/Button';
 import PersonalJandiGround from 'containers/PersonalJandiGround';
 import { withCookies, Cookies } from 'react-cookie';
 import axios from 'axios';
+import { setCount, setUser } from 'actions';
 
 const cx = classNames.bind(styles);
 class Mypage extends Component {
   constructor(props) {
     super(props)
     const { cookies } = props;
-    console.log(cookies)
     this.state = {
       isReadonlyUserName: true,
       isPopupOpen: false,
       input: {
-        password: 0,
-        userName: ''
-      }
+        email: props.email,
+        passLen: props.passLen,
+        userName: props.userName
+      },
+      todoDoneCount: 0,
+      todoTotalCount: 0
     }
   }
 
   componentDidMount() {
-
     let { cookies } = this.props.cookies;
     //user 정보가 없으면 리다이렉트
 
     if (!cookies.userId) {
       this.props.history.push('/login')
     }
-
     axios.get('http://localhost:5000/userinfo', { withCredentials: true }).then(res => {
       console.log(res.data);
+      let { todoDoneCount, todoTotalCount } = res.data.todolists[0];
+      this.props.setCount(todoDoneCount, todoTotalCount);
+      this.setState({
+        todoDoneCount: todoDoneCount,
+        todoTotalCount: todoTotalCount
+      })
     })
 
-    let password = '';
-    for (let i = 0; i < this.props.passLen; i++) {
-      password += 'p'
-    }
-    this.setState({
-      input: {
-        ...this.state.input,
-        password
-      }
-    })
   }
 
 
@@ -57,20 +54,23 @@ class Mypage extends Component {
       isReadonlyUserName: !prevState.isReadonlyUserName
     }))
   }
+
   onSubmitNickname(e) {
     let { userName } = this.state.input;
     if (userName === "") {
-      console.log('안돼요')
+      //console.log('안돼요')
       return;
     }
     axios.put('http://localhost:5000/userchange', {
       userName
     }, { withCredentials: true }).then(res => {
-      console.log(res.data.nickName);
+      let { email, passLen, userName } = this.state.input;
+      this.props.setUser(email, passLen, userName);
+      this.setState((prevState) => ({
+        isReadonlyUserName: !prevState.isReadonlyUserName
+      }))
     })
-    this.setState((prevState) => ({
-      isReadonlyUserName: !prevState.isReadonlyUserName
-    }))
+
   }
   changeInput(e) {
     let { name, value } = e.target;
@@ -95,6 +95,10 @@ class Mypage extends Component {
   }
 
   render() {
+    let pass = '';
+    for (let i = 0; i < this.state.input.passLen; i++) {
+      pass += 'p';
+    }
     return (
       <div className="App-wrap">
         <div className="mb-view">
@@ -105,13 +109,13 @@ class Mypage extends Component {
               <li>
                 <label>이메일</label>
                 <div className="inputWrap">
-                  <input type="test" value="test@test.com" readOnly />
+                  <input type="test" value={this.props.email} readOnly />
                 </div>
               </li>
               <li>
                 <label>닉네임</label>
                 <div className="inputWrap" style={!this.state.isReadonlyUserName ? { paddingRight: '85px' } : null}>
-                  <input type="text" value={this.state.input.nickName} readOnly={this.state.isReadonlyUserName} onChange={this.changeInput.bind(this)} name="nickname" />
+                  <input type="text" value={this.state.input.userName} readOnly={this.state.isReadonlyUserName} onChange={this.changeInput.bind(this)} name="nickname" />
                   {this.state.isReadonlyUserName ? (
                     <div className="btnModify" onClick={this.modifyNickName.bind(this)}>
                       <img src="/img/ico_modify.png" alt="닉네임 수정" />
@@ -121,7 +125,7 @@ class Mypage extends Component {
               <li>
                 <label>비밀번호</label>
                 <div className="inputWrap">
-                  <input type="password" value={this.state.input.password} readOnly />
+                  <input type="password" value={pass} readOnly />
                   <div className="btnModify" onClick={this.onOpenPopup.bind(this)}>
                     <img src="/img/ico_modify.png" alt="비밀번호 수정" />
                   </div>
@@ -131,9 +135,9 @@ class Mypage extends Component {
             <div className="MyPage-graph">
               <h3>
                 개인 성취율 그래프
-                <span>53/87</span>
+                  <span>{this.state.todoDoneCount}/{this.state.todoTotalCount}</span>
               </h3>
-              <PersonalJandiGround todoCount={[53, 87]} />
+              <PersonalJandiGround todoCount={[this.state.todoDoneCount, this.state.todoTotalCount]} />
             </div>
           </div>{/*App-contents*/}
           <Popup open={this.state.isPopupOpen} onClosePopup={this.onClosePopup.bind(this)}>
@@ -166,11 +170,13 @@ class Mypage extends Component {
 const mapStateToProps = (state) => ({
   // works: state.workReducer.works,
   email: state.userReducer.email,
-  passLen: state.userReducer.passLen
+  passLen: state.userReducer.passLen,
+  userName: state.userReducer.userName
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  // loadWork: (id) => { return dispatch(loadWork(id)) }
+  setCount: (todoDoneCount, todoTotalCount) => dispatch(setCount(todoDoneCount, todoTotalCount)),
+  setUser: (email, passLen, userName) => dispatch(setUser(email, passLen, userName))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Mypage));
