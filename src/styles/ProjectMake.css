@@ -1,0 +1,44 @@
+:global .MainCreatePoject{
+  margin-top:40px;
+}
+:global .MainCreatePoject li{
+  margin-bottom: 15px;
+}
+:global .MainCreatePoject li .inputWrap{
+  margin-top:8px;
+}
+:global .MainCreatePoject .flexRow{
+  align-items: flex-end;
+}
+
+:global .addedMemberList{
+  margin-top:23px;
+  color:#B8B8B8;
+  max-height:80px;
+  overflow-y:auto;
+  margin-bottom:20px;
+}
+
+
+:global .btnDelete {
+  display:block;
+  position: relative;
+  top:1px;
+  width:15px;
+  margin-left: 5px;
+}
+
+:global .Main-JandiGround{
+  width:100%;
+  margin-top:15px;
+  overflow-x:auto;
+}
+:global .Main-projectList li {
+  margin-top:23px;
+}
+
+:global .Main-projectList li h4{
+  color:#B8B8B8;
+  font-style: italic;
+  letter-spacing: -1px;
+}

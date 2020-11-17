@@ -10,7 +10,7 @@ class Popup extends Component {
         // Props에 설정 필수값: min-height, height
         <div className="PopupWrapper">
           {/* 팝업 컴포넌트 사용시 props에 onClosePopup 메소드를 연결해주세요 */}
-          <div className="btnClosePopup" onClick={this.props.onClosePopup}>
+          <div className="btnClosePopup" onClick={this.props.onClosePopup || this.handleCloseRemovePopup}>
             <img src="/img/btn_close_popup.png" alt="팝업닫기" />
           </div>
           {this.props.children}

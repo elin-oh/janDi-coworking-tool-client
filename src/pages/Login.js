@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import classNames from 'classnames/bind';
-import styles from 'styles/login.css';
+import styles from 'styles/Login.css';
 import { Link } from 'react-router-dom';
 import Button from 'components/Button'
 //import Fblogin from 'components/Fblogin' 페이스북 로그인
@@ -65,7 +65,7 @@ class Login extends Component {
               </form>
               <div onClick={this.handleLogin.bind(this)}>
                 {<div style={{ color: "red" }} >{this.state.errorMessage}</div>}
-                <Button bgColor='#b8B8B8' color="white" mdSize="full" >로그인</Button>
+                <Button bgColor='#b8B8B8' color="white">로그인</Button>
               </div>
             </ul>
             <div className="goToSignUp">
