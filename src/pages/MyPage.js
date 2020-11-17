@@ -10,6 +10,7 @@ import PersonalJandiGround from 'containers/PersonalJandiGround';
 import { withCookies, Cookies } from 'react-cookie';
 import axios from 'axios';
 import { setCount, setUser } from 'actions';
+import { server_path } from 'modules/path.js';
 
 const cx = classNames.bind(styles);
 class Mypage extends Component {
@@ -39,7 +40,7 @@ class Mypage extends Component {
     if (!cookies.userId) {
       this.props.history.push('/login')
     }
-    axios.get('http://localhost:5000/userinfo', { withCredentials: true }).then(res => {
+    axios.get(server_path + '/userinfo', { withCredentials: true }).then(res => {
       if (res.data.todolists[0]) {
         let { todoDoneCount, todoTotalCount } = res.data.todolists[0];
         this.props.setCount(todoDoneCount, todoTotalCount);
@@ -65,7 +66,7 @@ class Mypage extends Component {
       //console.log('안돼요')
       return;
     }
-    axios.put('http://localhost:5000/userchange', {
+    axios.put(server_path + '/userchange', {
       userName
     }, { withCredentials: true }).then(res => {
       let { email, passLen, userName } = this.state.input;
@@ -113,7 +114,7 @@ class Mypage extends Component {
     } else if (changePass !== changePassCheck) {
       console.log('변경할 비밀번호와 비밀번호 확인은 같아야합니다');
     } else {
-      axios.put('http://localhost:5000/userchange', {
+      axios.put(server_path + '/userchange', {
         currentPassword: currentPass,
         newPassword: changePass
       }, { withCredentials: true }).then(res => {

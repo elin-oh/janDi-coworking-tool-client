@@ -4,7 +4,9 @@ import Button from 'components/Button';
 import classNames from 'classnames/bind';
 import styles from 'styles/SignUp.css';
 import axios from 'axios';
+import { server_path } from 'modules/path.js';
 const cx = classNames.bind(styles);
+
 
 class Signup extends Component {
 
@@ -35,7 +37,7 @@ class Signup extends Component {
     if (this.validateForm()) {
       //validate 통과시
       axios
-        .post('http://localhost:5000/userpost', {
+        .post(server_path + '/userpost', {
           email,
           userName,
           password
