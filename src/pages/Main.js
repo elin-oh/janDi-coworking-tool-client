@@ -34,7 +34,6 @@ class Main extends Component {
   }
 
   componentDidMount() {
-    console.log(this.element)
     for (let el of this.state.todoLists) {
       this.jandiEl[el.id].scrollLeft = this.jandiEl[el.id].scrollWidth - this.jandiEl[el.id].offsetWidth;
     }
@@ -118,7 +117,7 @@ class Main extends Component {
                       <img src="/img/btn_delete_member.png" alt="멤버 삭제" className="btnDelete" />
                     </li>
                   </ul>
-                  <Button>프로젝트 생성하기</Button>
+                  <Button >프로젝트 생성하기</Button>
                 </li>
               </ul>
             </Popup>

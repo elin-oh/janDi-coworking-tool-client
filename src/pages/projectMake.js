@@ -40,9 +40,11 @@ class ProjectMake extends Component {
       userId: 1,
       isChecked: false,
       todos: [  //이건 이렇게 나누는게 맞는건가?
-        { id: 2, body: "todolist 1", isChecked: true },
-        { id: 3, body: "todolist 2", isChecked: false },
-        { id: 4, body: "todolist 3", isChecked: true }
+        {
+          id: 2,
+          body: "todolist 1",
+          isChecked: true
+        },
       ]
     }
     this.handleChange = this.handleChange.bind(this);
@@ -90,7 +92,6 @@ class ProjectMake extends Component {
 
   handleCreate() {
     const { input, projectId, userId, isChecked } = this.state;
-    console.log(this.state)
     if (!input) {
       this.setState({
         errorMessage: "내용을 입력하세요."
@@ -142,12 +143,17 @@ class ProjectMake extends Component {
           ...todos.slice(index + 1, todos.length)
         ]
       });
+
+    // axios.put('http://localhost:5000/todolistchange', { isChecked })
   }
 
   hanleRemove = (id) => {
-    this.setState({
-      todos: this.state.todos.filter(todo => todo.id !== id)
-    });
+    axios.delete('http://localhost:5000/todolistdelete', {
+      id
+    }).then(res => console.log(res))
+    // this.setState({
+    //   todos: this.state.todos.filter(todo => todo.id !== id)
+    // });
   }
 
 
