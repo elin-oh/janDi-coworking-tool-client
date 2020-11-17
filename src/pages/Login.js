@@ -33,7 +33,6 @@ class Login extends Component {
   handleLogin = () => {
     const { cookies } = this.props;
     const { emailId, password } = this.state;
-    // const { handleResponseSuccess } = this.props;
     if (!emailId || !password) {
       //console.log("====================", this.state)
       this.setState({
@@ -45,9 +44,9 @@ class Login extends Component {
         email: emailId,
         password
       }, { withCredentials: true }).then(res => {
-        console.log(res.data);
         let passLen = password.length;
-        cookies.set('userId', res.data.id, { path: ' / ' });
+        cookies.set('userId', res.data.id, { path: '/' });
+        console.log(emailId, passLen, res.data.userName);
         this.props.setUser(emailId, passLen, res.data.userName);
         this.props.history.push("/");
       }).catch(error => {
@@ -107,7 +106,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   // loadWork: (id) => { return dispatch(loadWork(id)) }
-  setUser: (email, passLen) => dispatch(setUser(email, passLen))
+  setUser: (email, passLen, userName) => dispatch(setUser(email, passLen, userName))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Login));
