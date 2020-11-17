@@ -1,0 +1,44 @@
+.todoItem {
+  padding: 1rem;
+  display: flex;
+  align-items: center; 
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+
+
+/* todo-item 에 마우스가 있을때만 .remove 보이기 */
+.todoItem:hover .remove {
+  opacity: 1;
+}
+
+.todoItem + .todoItem {
+  border-top: 1px solid #f1f3f5;
+}
+
+
+.remove {
+  margin-right: 1rem;
+  color: #e64980;
+  font-weight: 600;
+  opacity: 0;
+}
+
+.todoText {
+  flex: 1; 
+  word-break: break-all;
+}
+
+:global .isChecked {
+  text-decoration: line-through;
+  color: #adb5bd;
+}
+
+.checkMark {
+  font-size: 1.5rem;
+  line-height: 1rem;
+  margin-left: 1rem;
+  color: #28B351;
+  font-weight: 800;
+}

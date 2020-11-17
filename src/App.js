@@ -2,7 +2,7 @@ import React from 'react';
 import './styles/reset.css';
 import './styles/App.css';
 import { Route } from 'react-router-dom';
-import { Main, MyPage, Login, SignUp } from 'pages';
+import { Main, MyPage, Login, SignUp, ProjectMake } from 'pages';
 
 function App() {
   return (
@@ -11,6 +11,7 @@ function App() {
       <Route exact path="/mypage" component={MyPage} />
       <Route exact path="/signup" component={SignUp} />
       <Route exact path="/login" component={Login} />
+      <Route exact path="/projectmake" component={ProjectMake} />
     </div>
   );
 }
