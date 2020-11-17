@@ -7,28 +7,37 @@ import MiniButton from 'components/MiniButton';
 import Popup from 'components/Popup';
 import Button from 'components/Button';
 import PersonalJandiGround from 'containers/PersonalJandiGround';
+import { withCookies, Cookies } from 'react-cookie';
+import axios from 'axios';
 
 const cx = classNames.bind(styles);
 class Mypage extends Component {
   constructor(props) {
     super(props)
-
+    const { cookies } = props;
+    console.log(cookies)
     this.state = {
       isReadonlyUserName: true,
-      inputNickName: '',
       isPopupOpen: false,
       input: {
-        password: ''
+        password: 0,
+        userName: ''
       }
     }
   }
 
   componentDidMount() {
 
+    let { cookies } = this.props.cookies;
     //user 정보가 없으면 리다이렉트
-    if (!this.props.email) {
+
+    if (!cookies.userId) {
       this.props.history.push('/login')
     }
+
+    axios.get('http://localhost:5000/userinfo', { withCredentials: true }).then(res => {
+      console.log(res.data);
+    })
 
     let password = '';
     for (let i = 0; i < this.props.passLen; i++) {
@@ -36,6 +45,7 @@ class Mypage extends Component {
     }
     this.setState({
       input: {
+        ...this.state.input,
         password
       }
     })
@@ -48,6 +58,16 @@ class Mypage extends Component {
     }))
   }
   onSubmitNickname(e) {
+    let { userName } = this.state.input;
+    if (userName === "") {
+      console.log('안돼요')
+      return;
+    }
+    axios.put('http://localhost:5000/userchange', {
+      userName
+    }, { withCredentials: true }).then(res => {
+      console.log(res.data.nickName);
+    })
     this.setState((prevState) => ({
       isReadonlyUserName: !prevState.isReadonlyUserName
     }))
@@ -56,7 +76,10 @@ class Mypage extends Component {
     let { name, value } = e.target;
     if (name === 'nickname') {
       this.setState({
-        inputNickName: value
+        input: {
+          ...this.state.input,
+          userName: value
+        }
       })
     }
   }
@@ -88,7 +111,7 @@ class Mypage extends Component {
               <li>
                 <label>닉네임</label>
                 <div className="inputWrap" style={!this.state.isReadonlyUserName ? { paddingRight: '85px' } : null}>
-                  <input type="text" value={this.state.inputNickName} readOnly={this.state.isReadonlyUserName} onChange={this.changeInput.bind(this)} name="nickname" />
+                  <input type="text" value={this.state.input.nickName} readOnly={this.state.isReadonlyUserName} onChange={this.changeInput.bind(this)} name="nickname" />
                   {this.state.isReadonlyUserName ? (
                     <div className="btnModify" onClick={this.modifyNickName.bind(this)}>
                       <img src="/img/ico_modify.png" alt="닉네임 수정" />
@@ -98,7 +121,7 @@ class Mypage extends Component {
               <li>
                 <label>비밀번호</label>
                 <div className="inputWrap">
-                  <input type="password" value="password" readOnly />
+                  <input type="password" value={this.state.input.password} readOnly />
                   <div className="btnModify" onClick={this.onOpenPopup.bind(this)}>
                     <img src="/img/ico_modify.png" alt="비밀번호 수정" />
                   </div>
@@ -150,4 +173,4 @@ const mapDispatchToProps = (dispatch) => ({
   // loadWork: (id) => { return dispatch(loadWork(id)) }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Mypage);
+export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Mypage));

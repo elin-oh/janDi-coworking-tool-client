@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
+import { withCookies, Cookies } from 'react-cookie';
 import styles from 'styles/Login.css';
 import { Link } from 'react-router-dom';
 import Button from 'components/Button';
 import axios from 'axios';
 import { setUser } from 'actions';
+
 //import Fblogin from 'components/Fblogin' 페이스북 로그인
 
 const cx = classNames.bind(styles);
@@ -13,7 +15,7 @@ class Login extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      userId: "",
+      emailId: "",
       password: "",
       errorMessage: "",
       test: ""
@@ -29,9 +31,10 @@ class Login extends Component {
   };
 
   handleLogin = () => {
-    const { userId, password } = this.state;
+    const { cookies } = this.props;
+    const { emailId, password } = this.state;
     // const { handleResponseSuccess } = this.props;
-    if (!userId || !password) {
+    if (!emailId || !password) {
       //console.log("====================", this.state)
       this.setState({
         errorMessage: "아이디 또는 비밀번호를 입력하세요."
@@ -39,12 +42,12 @@ class Login extends Component {
     } else {
       //console.log("====================", this.state)
       axios.post('http://localhost:5000/login', {
-        email: userId,
+        email: emailId,
         password
-      }).then(res => {
-        console.log(res);
+      }, { withCredentials: true }).then(res => {
         let passLen = password.length;
-        this.props.setUser(userId, passLen);
+        cookies.set('userId', res.data.id, { path: ' / ' });
+        this.props.setUser(emailId, passLen);
         this.props.history.push("/");
       }).catch(error => {
         if (error.response && error.response.status === 404) {
@@ -68,7 +71,7 @@ class Login extends Component {
             <ul className={cx('login-userInfo')}>
               <li>
                 <div className="inputWrap">
-                  <input type='text' placeholder="아이디를 입력하세요" onChange={this.handleInputValue("userId")}></input>
+                  <input type='text' placeholder="아이디를 입력하세요" onChange={this.handleInputValue("emailId")}></input>
                 </div>
               </li>
               <li>
@@ -106,4 +109,4 @@ const mapDispatchToProps = (dispatch) => ({
   setUser: (email, passLen) => dispatch(setUser(email, passLen))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Login));
