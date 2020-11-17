@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { withCookies, Cookies } from 'react-cookie';
 import Header from 'components/Header';
 import Button from 'components/Button';
 import Popup from 'components/Popup';
@@ -23,9 +24,18 @@ class Main extends Component {
   }
 
   componentDidMount() {
+    let { cookies } = this.props;
 
     axios.get(server_path + '/main', { withCredentials: true }).then(res => {
+      console.log(res.data);
       this.props.setProjects(res.data);
+    }).catch(error => {
+      if (error.response && error.response.status === 401) {
+        //쿠키삭제
+        cookies.remove('userId');
+        this.props.history.push('/login');
+      }
+
     })
 
     //스크롤조정
@@ -66,7 +76,7 @@ class Main extends Component {
                     <Link to={`/projectmake/${item.id}`}>
                       <h4>{item.projectName}</h4>
                       <div className="Main-JandiGround" ref={(el) => { this.jandiEl[item.id] = el }} >
-                        <JandiGround title={item.tile} />
+                        <JandiGround title={item.tile} todoLists={item.todolists} />
                       </div>
                     </Link>
                   </li>
@@ -132,4 +142,4 @@ const mapDispatchToProps = (dispatch) => ({
   setProjects: (projectLists) => dispatch(setProjects(projectLists))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Main));

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import Header from 'components/Header';
 import { connect } from 'react-redux';
+import { withCookies, Cookies } from 'react-cookie';
 import classNames from 'classnames/bind';
 import styles from 'styles/MyPage.css';
 import MiniButton from 'components/MiniButton';
 import Popup from 'components/Popup';
 import Button from 'components/Button';
 import PersonalJandiGround from 'containers/PersonalJandiGround';
-import { withCookies, Cookies } from 'react-cookie';
 import axios from 'axios';
 import { setCount, setUser } from 'actions';
 import { server_path } from 'modules/path.js';
