@@ -4,8 +4,8 @@ import Button from 'components/Button';
 import Popup from 'components/Popup';
 import MiniButton from 'components/MiniButton';
 import JandiGround from 'containers/JandiGround';
+import axios from 'axios'
 import styles from '../styles/Main.css';
-import axios from 'axios';
 import { server_path } from 'modules/path.js';
 // const cx = classNames.bind(styles);
 
@@ -58,6 +58,8 @@ class Main extends Component {
   handleScroll(e) {
 
   }
+
+
 
   render() {
     return (
@@ -120,7 +122,7 @@ class Main extends Component {
                       <img src="/img/btn_delete_member.png" alt="멤버 삭제" className="btnDelete" />
                     </li>
                   </ul>
-                  <Button>프로젝트 생성하기</Button>
+                  <Button >프로젝트 생성하기</Button>
                 </li>
               </ul>
             </Popup>

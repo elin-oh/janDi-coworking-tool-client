@@ -9,7 +9,8 @@ import Popup from 'components/Popup';
 import Button from 'components/Button'
 import classNames from 'classnames/bind'
 import MiniButton from 'components/MiniButton'
-
+import axios from 'axios';
+import server_path from 'module'
 
 const cx = classNames.bind(styles);
 
@@ -21,6 +22,7 @@ class ProjectMake extends Component {
     this.state = {
       isPopupOpen: false,
       removePopup: false,
+      errorMessage: "",
       //  ** 잔디 처리용 정보
       isAdmin: true,
       member: [
@@ -34,16 +36,20 @@ class ProjectMake extends Component {
       //
       // todo리스트 처리용 정보
       input: '',
+      projectId: 1,
+      userId: 1,
+      isChecked: false,
       todos: [  //이건 이렇게 나누는게 맞는건가?
-        { id: 2, body: "todolist 1", isChecked: true },
-        { id: 3, body: "todolist 2", isChecked: false },
-        { id: 4, body: "todolist 3", isChecked: true }
+        {
+          id: 2,
+          body: "todolist 1",
+          isChecked: true
+        },
       ]
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
-    //this.handletoggle = this.handleToggle.bind(this);
   }
 
   componentDidMount() {
@@ -85,15 +91,35 @@ class ProjectMake extends Component {
   }
 
   handleCreate() {
-    const { input, todos } = this.state;
-    this.setState({
-      input: '',
-      todos: todos.concat({
-        id: this.id++,
-        body: input,
-        isChecked: false
+    const { input, projectId, userId, isChecked } = this.state;
+    if (!input) {
+      this.setState({
+        errorMessage: "내용을 입력하세요."
       })
-    })
+    } else {
+      axios.post(server_path + '/todolistpost', {
+        body: input,
+        projectId,
+        userId: userId,
+        isChecked
+      })
+        .then(res => console.log(res))
+        .catch(error => {
+          if (error.response && error.response.status === 422) {
+            this.setState({
+              errorMessage: '오류가 발생했습니다.'
+            })
+          }
+        })
+      // this.setState({
+      //   input: '',
+      //   todos: todos.concat({
+      //     id: this.id++,
+      //     body: input,
+      //     isChecked: false
+      //   })
+      // })
+    }
   }
 
   handleKeyPress(e) {
@@ -117,12 +143,17 @@ class ProjectMake extends Component {
           ...todos.slice(index + 1, todos.length)
         ]
       });
+
+    // axios.put( server_path + '/todolistchange', { isChecked })
   }
 
   hanleRemove = (id) => {
-    this.setState({
-      todos: this.state.todos.filter(todo => todo.id !== id)
-    });
+    axios.delete(server_path + '/todolistdelete', {
+      id
+    }).then(res => console.log(res))
+    // this.setState({
+    //   todos: this.state.todos.filter(todo => todo.id !== id)
+    // });
   }
 
 
@@ -149,6 +180,7 @@ class ProjectMake extends Component {
             </ul>
             <TodoList TodoInput={(
               <TodoInput value={this.state.input} onKeyPress={this.handleKeyPress} onChange={this.handleChange} onCreate={this.handleCreate} />)}>
+              {this.state.errorMessage && <div className="warning_text">{this.state.errorMessage}</div>}
               <TodoItemList todos={this.state.todos} onToggle={this.handleToggle} onRemove={this.hanleRemove} />
             </TodoList>
           </div>{/* App-contents */}
@@ -186,7 +218,7 @@ class ProjectMake extends Component {
                     </li>
                   </ul>
                   <div onClick={this.onOpenRemovePopup.bind(this)}>프로젝트 삭제하기</div>
-                  <Button>프로젝트 수정</Button>
+                  <Button>확인</Button>
                 </li>
               </ul>
             </Popup>

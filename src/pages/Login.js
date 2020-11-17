@@ -80,7 +80,7 @@ class Login extends Component {
                 {this.state.errorMessage && <div className="warning_text">{this.state.errorMessage}</div>}
               </li>
               <li onClick={this.handleLogin.bind(this)} className={cx('btnLogin')}>
-                <Button>로그인</Button>
+                <Button >로그인</Button>
               </li>
             </ul>
             <div className="goToSignUp">
