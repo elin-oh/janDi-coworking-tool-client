@@ -1,5 +1,5 @@
 export { default as Main } from './Main';
 export { default as MyPage } from './MyPage';
 export { default as Login } from './Login'
-export { default as ProjectMake } from './ProjectMake'
+export { default as ProjectMake } from './projectMake'
 export { default as SignUp } from './SignUp'

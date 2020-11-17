@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Header from 'components/Header';
 import JandiGround from 'containers/JandiGround';
 import styles from 'styles/ProjectMake.css';
-import TodoList from 'components/TodoList'
+import TodoList from 'components/todolist'
 import TodoInput from 'components/TodoInput'
 import TodoItemList from 'components/TodoItemList';
 import Popup from 'components/Popup';

@@ -1,0 +1,1 @@
+export const server_path = 'http://localhost:5000';
