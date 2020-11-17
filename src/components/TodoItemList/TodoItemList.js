@@ -8,7 +8,7 @@ class TodoItemList extends Component {
   //   return this.props.todos !== nextProps.todos;
   // }
   // axios = () => {
-  //   axios.post('http://localhost:5000/todolistinfo')
+  //   axios.post(server_path + '/todolistinfo')
   //     .then((res) => (console.log(res)))
   // }
 

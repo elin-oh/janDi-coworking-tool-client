@@ -6,7 +6,6 @@ import MiniButton from 'components/MiniButton';
 import JandiGround from 'containers/JandiGround';
 import axios from 'axios'
 import styles from '../styles/Main.css';
-import axios from 'axios';
 import { server_path } from 'modules/path.js';
 // const cx = classNames.bind(styles);
 

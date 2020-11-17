@@ -10,7 +10,7 @@ import Button from 'components/Button'
 import classNames from 'classnames/bind'
 import MiniButton from 'components/MiniButton'
 import axios from 'axios';
-
+import server_path from 'module'
 
 const cx = classNames.bind(styles);
 
@@ -97,7 +97,7 @@ class ProjectMake extends Component {
         errorMessage: "내용을 입력하세요."
       })
     } else {
-      axios.post('http://localhost:5000/todolistpost', {
+      axios.post(server_path + '/todolistpost', {
         body: input,
         projectId,
         userId: userId,
@@ -144,11 +144,11 @@ class ProjectMake extends Component {
         ]
       });
 
-    // axios.put('http://localhost:5000/todolistchange', { isChecked })
+    // axios.put( server_path + '/todolistchange', { isChecked })
   }
 
   hanleRemove = (id) => {
-    axios.delete('http://localhost:5000/todolistdelete', {
+    axios.delete(server_path + '/todolistdelete', {
       id
     }).then(res => console.log(res))
     // this.setState({
