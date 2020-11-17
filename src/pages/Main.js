@@ -4,6 +4,7 @@ import Button from 'components/Button';
 import Popup from 'components/Popup';
 import MiniButton from 'components/MiniButton';
 import JandiGround from 'containers/JandiGround';
+import axios from 'axios'
 import styles from '../styles/Main.css';
 
 
@@ -53,6 +54,8 @@ class Main extends Component {
   handleScroll(e) {
 
   }
+
+
 
   render() {
     return (

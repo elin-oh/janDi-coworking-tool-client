@@ -11,7 +11,6 @@ class TodoItem extends Component {
   render() {
     const { body, isChecked, id, onToggle, onRemove } = this.props;
     return (
-      console.log('=====================', this.prop),
       <div className={cx("todoItem")} onClick={() => onToggle(id)}>
         <div className={cx("remove")} onClick={(e) => {
           e.stopPropagation(); // onToggle 이 실행되지 않도롤 함

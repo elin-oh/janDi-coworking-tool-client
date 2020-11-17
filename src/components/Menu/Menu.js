@@ -1,9 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Menu.scss';
+import axios from 'axios';
 
-const Menu = (props) => (
-  <ul className="MenuWrapper">
+
+
+const Menu = (props) => {
+
+  return (<ul className="MenuWrapper">
     <li>
       <Link to="/">홈</Link>
     </li>
@@ -16,7 +20,8 @@ const Menu = (props) => (
     <li className="btnClose" onClick={props.onCloseMenu}>
       <img src="/img/btn_close.png" alt="메뉴닫기" />
     </li>
-  </ul>
-);
+  </ul>)
+};
+
 
 export default Menu;
