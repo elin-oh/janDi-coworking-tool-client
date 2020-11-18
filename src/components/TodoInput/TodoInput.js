@@ -7,9 +7,21 @@ const cx = classNames.bind(styles)
 const TodoInput = ({ value, onChange, onCreate, onKeyPress }) => {
   return (
     <div className={cx("TodoInput")}>
-      <input value={value} onChange={onChange} onKeyPress={onKeyPress} />
-      <div className={cx("create-button")} onClick={onCreate}>
-        추가
+
+      {/* 관리자한테만 보이는 라인 */}
+      <div className={cx('adminSelection')}>
+        <select>
+          <option>123@gmail.com</option>
+        </select>
+        <div className={cx('btnModify')}>
+          <img src="/img/btn_modify_project.png" alt="설정버튼" />
+        </div>
+      </div>
+      <div className={cx('inputWrapTodoInput')}>
+        <input type="text" placeholder="오늘의 할 일을 입력하세요" />
+        <div className={cx('btnCreateTodo')}>
+          추가
+        </div>
       </div>
     </div>
   );

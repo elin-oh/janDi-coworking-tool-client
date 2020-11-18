@@ -34,7 +34,6 @@ class Main extends Component {
       this.props.history.push('/login')
     }
     axios.get(server_path + '/main', { withCredentials: true }).then(res => {
-      console.log(res.data);
       this.props.setProjects(res.data);
     }).catch(error => {
       if (error.response && error.response.status === 401) {

@@ -1,31 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
+import styles from './TodoItem.scss';
 import classNames from 'classnames/bind';
-import styles from './TodoItem.scss'
+const cx = classNames.bind(styles);
 
-const cx = classNames.bind(styles)
+const TodoItem = (props) => (
+  <div className={cx('TodoItemWrapper')}>
+    <div className={cx('todoCheck')}>
+      <input type="checkbox" id={props.id} />
+      <label htmlFor={props.id}></label>
+      <span>Have a nice Day!</span>
+    </div>
+    <div className={cx('btnDeleteTodo')}>
+      <img src="/img/btn_delete_member.png" alt="투두삭제" className="btnDelete" />
+    </div>
+  </div >
+);
 
-class TodoItem extends Component {
 
-
-
-  render() {
-    const { body, isChecked, id, onToggle, onRemove } = this.props;
-    return (
-      <div className={cx("todoItem")} onClick={() => onToggle(id)}>
-        <div className={cx("remove")} onClick={(e) => {
-          e.stopPropagation();
-          {/*onToggle 이 실행되지 않도롤 함*/ }
-          onRemove(id)
-        }
-        }>&times;</div>
-        <div className={`todo-text ${isChecked && 'isChecked'}`}>
-          <div>{body}</div>
-        </div>
-        {
-          isChecked && (<div className={cx('checkMark')}>&#x2713;</div>)
-        }
-      </div>
-    );
-  }
-}
 export default TodoItem;

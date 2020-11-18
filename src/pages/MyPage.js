@@ -49,9 +49,7 @@ class Mypage extends Component {
         })
       }
     })
-
   }
-
 
   modifyNickName(e) {
     this.setState((prevState) => ({

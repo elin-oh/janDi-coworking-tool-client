@@ -1,44 +1,46 @@
-.todoItem {
-  padding: 1rem;
+/* your css code */
+
+.TodoItemWrapper{
   display: flex;
-  align-items: center; 
-  cursor: pointer;
-  transition: all 0.15s;
-  user-select: none;
+  justify-content: space-between;
+  align-items: center;
+  width:100%;
+  height: 38px;
+  padding: 0 10px;
+  background-color: white;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px 3px rgba(0, 0, 0, .1);
+  border-radius: 30px;
+}
+.todoCheck{
+  display: flex;
+  justify-content: center;
+}
+
+.todoCheck input[type="checkbox"] {
+  display: none;
+}
+.todoCheck input[type="checkbox"] + label{
+  display: inline-block;
+  width: 17px; 
+  height: 17px;
+  margin-right:5px;
+  border: 2px solid #57CB79;
+  border-radius: 50%;
+  background-color: white;
+}
+
+.todoCheck input[type="checkbox"]:checked + label{
+  background-image: url('/img/btn_todo_checked.png');
+  background-size: 110%;
+  background-position: center;
+}
+
+.todoCheck span{
+  color:#BCB7B7;
 }
 
 
-/* todo-item 에 마우스가 있을때만 .remove 보이기 */
-.todoItem:hover .remove {
-  opacity: 1;
-}
-
-.todoItem + .todoItem {
-  border-top: 1px solid #f1f3f5;
-}
-
-
-.remove {
-  margin-right: 1rem;
-  color: #e64980;
-  font-weight: 600;
-  opacity: 0;
-}
-
-.todoText {
-  flex: 1; 
-  word-break: break-all;
-}
-
-:global .isChecked {
-  text-decoration: line-through;
-  color: #adb5bd;
-}
-
-.checkMark {
-  font-size: 1.5rem;
-  line-height: 1rem;
-  margin-left: 1rem;
-  color: #28B351;
-  font-weight: 800;
+.btnDeleteTodo :global .btnDelete {
+  width:20px;
 }
