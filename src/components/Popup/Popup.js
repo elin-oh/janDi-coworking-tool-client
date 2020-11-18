@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './Popup.scss';
 
+// props에 open설정시 팝업 오픈
+// Props에 설정 필수값: min-height, height
 class Popup extends Component {
   // props에 open설정시 팝업 오픈
   render() {
