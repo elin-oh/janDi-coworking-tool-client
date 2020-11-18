@@ -34,9 +34,7 @@ class Project extends Component {
 
     let projectId = this.props.location.pathname.split('/')[2];
     let day = new Date().toISOString().slice(0, 10);
-
     this.props.setTodosDate(day);
-
     //프로젝트 설정
     let project;
     if (this.props.projects.length > 0) {
@@ -45,6 +43,7 @@ class Project extends Component {
       });
       if (project.length > 0) {
         this.setState({
+          projectId,
           project: project[0],
           projectNameInput: project[0].projectName,
           memberLists: this.props.member
@@ -60,7 +59,7 @@ class Project extends Component {
 
       //sorting 저장
       this.sortingLists();
-      this.props.setSortList(this.state.nameList, this.state.sortedTodoLists);
+
     }).catch(error => {
       this.setState({
         project: {}
@@ -74,8 +73,8 @@ class Project extends Component {
       nameList: []
     })
     if (this.props.todolists.length > 0) {
-      console.log(this.props.todolists);
       this.props.todolists.forEach(item => {
+        console.log(item);
         if (this.state.nameList.includes(item.user.userName) === false) {
           let nameListSlice = this.state.nameList.slice();
           nameListSlice.push(item.user.userName);
@@ -90,6 +89,8 @@ class Project extends Component {
         }
       })
     }
+
+    this.props.setSortList(this.state.nameList, this.state.sortedTodoLists);
   }
 
   onOpenPopup() {
@@ -152,7 +153,6 @@ class Project extends Component {
 
       //sorting 저장
       this.sortingLists();
-      this.props.setSortList(this.state.nameList, this.state.sortedTodoLists);
     }).catch(error => {
       this.setState({
         project: {}
@@ -206,7 +206,7 @@ class Project extends Component {
                 <JandiGround todoLists={this.state.project} method={this.handleClickTodo.bind(this, this.state.project)} />
               </div>
             </div>
-            <TodoInput member={this.state.member} onOpenModifyPopup={this.onOpenPopup.bind(this)} />
+            <TodoInput member={this.state.member} onOpenModifyPopup={this.onOpenPopup.bind(this)} projectId={this.state.projectId} onSorting={this.sortingLists.bind(this)} />
 
             <TodoListWrapper />
           </div>{/* App-contents */}
@@ -278,6 +278,8 @@ const mapStateToProps = (state) => ({
   member: state.todoReducer.todosInfo.member,
   targetDate: state.todoReducer.date,
   todolists: state.todoReducer.todosInfo.project.todolists || [],
+  nameList: state.todoReducer.nameList,
+  sortedTodoLists: state.todoReducer.sortedTodoLists
 });
 
 const mapDispatchToProps = (dispatch) => ({

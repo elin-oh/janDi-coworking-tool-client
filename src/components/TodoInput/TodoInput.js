@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import axios from 'axios';
+import { server_path } from 'modules/path';
 import styles from './TodoInput.scss';
 import classNames from 'classnames/bind';
+import { addTodoList } from 'actions';
+
+
 
 const cx = classNames.bind(styles);
 class TodoInput extends Component {
@@ -35,7 +40,31 @@ class TodoInput extends Component {
   }
 
   addTodos() {
-    // let { targetMember, inputTodo }
+    let { targetMember, inputTodo } = this.state;
+
+    let options = {};
+    if (targetMember === "") {
+      options = {
+        projectId: this.props.projectId,
+        body: inputTodo
+      }
+    } else {
+      options = {
+        projectId: this.props.projectId,
+        body: inputTodo,
+        email: targetMember
+      }
+    }
+    axios.post(server_path + '/todolistpost', options, { withCredentials: true }).then(res => {
+      let sliced = JSON.parse(JSON.stringify(res.data));
+
+      sliced.user = {};
+      sliced.user.userName = this.props.userName;
+      console.log(sliced);
+
+      this.props.addTodoList(sliced);
+      this.props.onSorting();
+    })
   }
 
   render() {
@@ -70,11 +99,13 @@ class TodoInput extends Component {
 
 
 const mapStateToProps = (state) => ({
+  userName: state.userReducer.userName,
   member: state.todoReducer.todosInfo.member,
   isAdmin: state.todoReducer.todosInfo.project.adminUserId
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  addTodoList: (todolist) => dispatch(addTodoList(todolist))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoInput);

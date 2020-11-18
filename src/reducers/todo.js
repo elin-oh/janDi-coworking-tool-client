@@ -27,6 +27,20 @@ function todoController(state = initialState, action) {
         nameList: action.nameList,
         sortedTodoLists: action.sortedTodoLists
       };
+    case types.ADD_TODO_LIST:
+      return {
+        ...state,
+        todosInfo: {
+          ...state.todosInfo,
+          project: {
+            ...state.todosInfo.project,
+            todolists: [
+              ...state.todosInfo.project.todolists,
+              action.todolist
+            ]
+          }
+        }
+      };
     default:
       return state;
   }

@@ -16,13 +16,6 @@ class TodoListWrapper extends Component {
     }
   }
 
-  componentDidMount() {
-
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-
-  }
 
 
   render() {
@@ -31,6 +24,7 @@ class TodoListWrapper extends Component {
         <div className={cx('TodoListWrapper')}>
           {
             this.props.nameList.map(item => {
+              console.log(item);
               return (
                 <TodoLists todoLists={this.props.sortedTodoLists[item]} name={item} key={item} />
               )
