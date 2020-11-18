@@ -10,14 +10,14 @@
 :global .MainCreatePoject .flexRow{
   align-items: flex-end;
 }
-/* 
+
 :global .addedMemberList{
   margin-top:23px;
   color:#B8B8B8;
   max-height:80px;
   overflow-y:auto;
   margin-bottom:20px;
-} */
+}
 
 
 :global .btnDelete {
