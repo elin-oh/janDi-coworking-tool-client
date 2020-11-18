@@ -1,0 +1,37 @@
+:global .TodoInput {
+  display: flex;
+}
+
+:global .TodoInput input {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  padding: 0 23px; 
+  color:gray;
+  font-size: 1.05rem;
+  font-weight: bold;
+  letter-spacing: -1.3px;
+  box-sizing: border-box;
+  border-radius: 30px;
+  cursor: default;
+}
+
+ .create-button {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: 1rem;
+  background: #28B351;
+  border-radius: 0px 30px 30px 0px;
+  color: white;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.create-button:hover {
+  background: #28B351;
+}

@@ -1,0 +1,46 @@
+:global .App-contents.sign_up {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+:global .topLogo{
+  display: inline-block;
+  width:120px;
+  padding: 30px 0 30px;
+}
+
+.Signup-input{
+  width:100%;
+}
+
+.Signup-input li{
+  margin-bottom: 25px;
+}
+
+
+.Signup-input :global .warning_text {
+  margin-top: -15px;
+}
+
+.btn_list{
+  width:100%;
+}
+.btn_list li{
+  height:52px;
+}
+
+.btn_list li.text{
+  height: 40px;
+  padding-bottom: 15px;
+}
+
+.btn_list li.text >span {
+  display: flex;
+  width:100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}

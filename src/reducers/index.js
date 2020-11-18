@@ -1,7 +1,13 @@
 import { combineReducers } from "redux";
-import testReducer from "./test";
+import userReducer from "./user";
+import countReducer from "./count";
+import projectsReducer from "./projects";
+import todosReducer from "./todos"
 
 
 export default combineReducers({
-    testReducer
+    userReducer,
+    countReducer,
+    projectsReducer,
+    todosReducer
 });
