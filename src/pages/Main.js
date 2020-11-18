@@ -8,10 +8,11 @@ import Popup from 'components/Popup';
 import MiniButton from 'components/MiniButton';
 import JandiGround from 'containers/JandiGround';
 import axios from 'axios';
+import classNames from 'classnames/bind';
 import styles from '../styles/Main.css';
 import { server_path } from 'modules/path.js';
 import { setProjects } from 'actions';
-// const cx = classNames.bind(styles);
+const cx = classNames.bind(styles);
 
 class Main extends Component {
   constructor(props) {
@@ -19,10 +20,10 @@ class Main extends Component {
     this.jandiEl = [];
     this.state = {
       isPopupOpen: false,
-      todoLists: [],
       projectNameInput: "",
       memberInput: "",
-      memberLists: []
+      memberLists: [],
+      errorMessage: ""
     }
   }
 
@@ -33,6 +34,7 @@ class Main extends Component {
       this.props.history.push('/login')
     }
     axios.get(server_path + '/main', { withCredentials: true }).then(res => {
+      console.log(res.data);
       this.props.setProjects(res.data);
     }).catch(error => {
       if (error.response && error.response.status === 401) {
@@ -43,7 +45,7 @@ class Main extends Component {
 
     })
     //스크롤조정
-    for (let el of this.state.todoLists) {
+    for (let el of this.props.projects) {
       this.jandiEl[el.id].scrollLeft = this.jandiEl[el.id].scrollWidth - this.jandiEl[el.id].offsetWidth;
     }
   }
@@ -65,27 +67,83 @@ class Main extends Component {
   onChangeInput(e) {
     let { name, value } = e.target;
 
+    if (name === "memberInput") {
+      this.setState({
+        errorMessage: ""
+      })
+    }
+
     this.setState({
       [name]: value
     })
   }
 
   onClickBtnInvite(e) {
-    let memLi = this.state.memberLists;
-    memLi.push(this.state.memberInput);
     this.setState({
-      memberInput: '',
-      memberLists: memLi
-    });
+      errorMessage: ""
+    })
+    if (this.state.memberInput === "") {
+      this.setState({
+        errorMessage: "초대할 멤버를 입력해주세요"
+      })
+      return;
+    }
+    axios.post(server_path + '/usercheck', {
+      email: this.state.memberInput
+    }, { withCredentials: true }).then(res => {
+      console.log(res.data);
+      if (res.data.isUser === true) {
+        let memLi = this.state.memberLists;
+        memLi.push(this.state.memberInput);
+        this.setState({
+          memberInput: '',
+          memberLists: memLi
+        });
+      } else {
+        this.setState({
+          errorMessage: "가입된 유저가 아닙니다"
+        })
+      }
+    }).catch(error => {
+      console.error(error)
+    })
+    // let memLi = this.state.memberLists;
+    // memLi.push(this.state.memberInput);
+    // this.setState({
+    //   memberInput: '',
+    //   memberLists: memLi
+    // });
   }
 
   onCreateProject() {
-    axios.post(server_path + '/projectpost', {
-      projectName: this.state.projectNameInput,
-      member: this.state.memberLists
-    }, { withCredentials: true }).then(res => {
-      console.log(res);
-    })
+    let { cookies } = this.props;
+    let { projectNameInput, memberLists } = this.state;
+    if (projectNameInput === "") {
+      this.setState({
+        errorMessage: "프로젝트 이름을 지정해주세요"
+      });
+      return;
+    } else {
+      axios.post(server_path + '/projectpost', {
+        projectName: this.state.projectNameInput,
+        member: this.state.memberLists
+      }, { withCredentials: true }).then(res => {
+        this.setState({
+          isPopupOpen: false
+        });
+
+        axios.get(server_path + '/main', { withCredentials: true }).then(res => {
+          this.props.setProjects(res.data);
+        }).catch(error => {
+          if (error.response && error.response.status === 401) {
+            //쿠키삭제
+            cookies.remove('userId');
+            this.props.history.push('/login');
+          }
+        })
+      })
+    }
+
   }
 
   deleteMember(index) {
@@ -106,7 +164,6 @@ class Main extends Component {
             <div onClick={this.onOpenPopup.bind(this)}>
               <Button >프로젝트 생성하기</Button>
             </div>
-
             <ul className="Main-projectList" >
               {
                 this.props.projects.map(item => (
@@ -119,7 +176,6 @@ class Main extends Component {
                         <JandiGround title={item.tile} todoLists={item.todolists} />
                       </div>
                     </div>
-
                   </li>
                 ))
               }
@@ -148,22 +204,32 @@ class Main extends Component {
                     </div>
                   </div>
 
-                  <ul className="addedMemberList">
-                    {
-                      this.state.memberLists.length > 0 &&
-                      this.state.memberLists.map((item, index) => {
-                        return (
-                          <li className="flex" key={index} data-key={index}>
-                            <span>{item}</span>
-                            <div onClick={this.deleteMember.bind(this, index)}>
-                              <img src="/img/btn_delete_member.png" alt="멤버 삭제" className="btnDelete" />
-                            </div>
-                          </li>
-                        )
-                      })
-                    }
-                  </ul>
-                  <div onClick={this.onCreateProject.bind(this)}>
+                  {
+                    this.state.memberLists.length > 0 &&
+                    <ul className="addedMemberList">
+                      {
+                        this.state.memberLists.length > 0 &&
+                        this.state.memberLists.map((item, index) => {
+                          return (
+                            <li className="flex" key={index} data-key={index}>
+                              <span>{item}</span>
+                              <div onClick={this.deleteMember.bind(this, index)}>
+                                <img src="/img/btn_delete_member.png" alt="멤버 삭제" className="btnDelete" />
+                              </div>
+                            </li>
+                          )
+                        })
+                      }
+                    </ul>
+                  }
+
+                  {
+                    this.state.errorMessage ? (
+                      <span className="warning_text">{this.state.errorMessage}</span>
+                    ) : null
+                  }
+
+                  <div className={cx('btnSubmitCreateProject')} onClick={this.onCreateProject.bind(this)}>
                     <Button >프로젝트 생성하기</Button>
                   </div>
                 </li>
