@@ -2,7 +2,9 @@ import * as types from '../actions/ActionTypes';
 
 const initialState = {
   todosInfo: [],
-  date: ''
+  date: '',
+  nameList: [],
+  sortedTodoLists: {}
 };
 
 
@@ -18,6 +20,12 @@ function todoController(state = initialState, action) {
       return {
         ...state,
         date: action.date
+      };
+    case types.SET_SORT_LIST:
+      return {
+        ...state,
+        nameList: action.nameList,
+        sortedTodoLists: action.sortedTodoLists
       };
     default:
       return state;

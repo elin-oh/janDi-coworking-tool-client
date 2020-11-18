@@ -38,3 +38,12 @@ export const setTodoDate = (date) => {
         date
     })
 };
+
+
+export const setSortList = (nameList, sortedTodoLists) => {
+    return ({
+        type: types.SET_SORT_LIST,
+        nameList,
+        sortedTodoLists
+    })
+};

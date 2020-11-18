@@ -17,36 +17,22 @@ class TodoListWrapper extends Component {
   }
 
   componentDidMount() {
-    this.mapTodoList();
+
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+
   }
 
 
-  mapTodoList() {
-    if (this.props.todoinfos.todolists) {
-      this.props.todoinfos.todolists.forEach(item => {
-        if (this.state.nameList.includes(item.user.userName) === false) {
-          let nameListSlice = this.state.nameList.slice();
-          nameListSlice.push(item.user.userName);
-          this.setState({
-            nameList: nameListSlice
-          })
-        }
-        if (this.state.sortedTodoLists[item.user.userName]) {
-          this.state.sortedTodoLists[item.user.userName].push(item)
-        } else {
-          this.state.sortedTodoLists[item.user.userName] = []
-        }
-      })
-    }
-  }
   render() {
-    if (this.state.nameList.length > 0) {
+    if (this.props.nameList.length > 0) {
       return (
         <div className={cx('TodoListWrapper')}>
           {
-            this.state.nameList.map(item => {
+            this.props.nameList.map(item => {
               return (
-                <TodoLists todoLists={this.state.sortedTodoLists[item]} name={item} key={item} />
+                <TodoLists todoLists={this.props.sortedTodoLists[item]} name={item} key={item} />
               )
             })
           }
@@ -65,7 +51,8 @@ class TodoListWrapper extends Component {
 
 const mapStateToProps = (state) => ({
   // works: state.workReducer.works,
-  todoinfos: state.todoReducer.todosInfo.project,
+  sortedTodoLists: state.todoReducer.sortedTodoLists,
+  nameList: state.todoReducer.nameList
 });
 
 const mapDispatchToProps = (dispatch) => ({

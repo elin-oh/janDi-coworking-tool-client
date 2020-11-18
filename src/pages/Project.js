@@ -12,7 +12,7 @@ import styles from 'styles/Project.css';
 import Popup from 'components/Popup';
 import Button from 'components/Button';
 import MiniButton from 'components/MiniButton';
-import { setTodos, setTodoDate } from 'actions';
+import { setTodos, setTodoDate, setSortList } from 'actions';
 
 const cx = classNames.bind(styles);
 
@@ -24,7 +24,9 @@ class Project extends Component {
       isPopupOpen: false,
       memberInput: "",
       memberLists: [],
-      projectNameInput: ""
+      projectNameInput: "",
+      sortedTodoLists: {},
+      nameList: []
     }
   }
 
@@ -49,25 +51,47 @@ class Project extends Component {
         })
       }
     }
-
-    // axios.get(server_path + '/projectinfo?pid=' + projectId + '&day=' + day, { withCredentials: true }).then(res => { console.log(res) }).catch(error => {
-    //   this.setState({
-    //     project: {}
-    //   })
-    // })
-
     axios.get(server_path + '/projectinfo?pid=' + projectId + '&day=' + this.props.targetDate, { withCredentials: true }).then(res => {
-      console.log(res.data)
+
       let filteredMember = res.data.member.filter(item => item !== this.props.userEmail);
       let data = res.data;
       data.member = filteredMember;
       this.props.setTodos(data);
+
+      //sorting 저장
+      this.sortingLists();
+      this.props.setSortList(this.state.nameList, this.state.sortedTodoLists);
     }).catch(error => {
       this.setState({
         project: {}
       })
     })
   }
+
+  sortingLists() {
+    this.setState({
+      sortedTodoLists: {},
+      nameList: []
+    })
+    if (this.props.todolists.length > 0) {
+      console.log(this.props.todolists);
+      this.props.todolists.forEach(item => {
+        if (this.state.nameList.includes(item.user.userName) === false) {
+          let nameListSlice = this.state.nameList.slice();
+          nameListSlice.push(item.user.userName);
+          this.setState({
+            nameList: nameListSlice
+          })
+        }
+        if (this.state.sortedTodoLists[item.user.userName]) {
+          this.state.sortedTodoLists[item.user.userName].push(item)
+        } else {
+          this.state.sortedTodoLists[item.user.userName] = []
+        }
+      })
+    }
+  }
+
   onOpenPopup() {
     this.setState({
       isPopupOpen: true
@@ -121,11 +145,14 @@ class Project extends Component {
   }
   handleClickTodo(project, e) {
     axios.get(server_path + '/projectinfo?pid=' + project.id + '&day=' + e.target.dataset.key, { withCredentials: true }).then(res => {
-      console.log(res.data)
       let filteredMember = res.data.member.filter(item => item !== this.props.userEmail);
       let data = res.data;
       data.member = filteredMember;
       this.props.setTodos(data);
+
+      //sorting 저장
+      this.sortingLists();
+      this.props.setSortList(this.state.nameList, this.state.sortedTodoLists);
     }).catch(error => {
       this.setState({
         project: {}
@@ -250,11 +277,13 @@ const mapStateToProps = (state) => ({
   userEmail: state.userReducer.email,
   member: state.todoReducer.todosInfo.member,
   targetDate: state.todoReducer.date,
+  todolists: state.todoReducer.todosInfo.project.todolists || [],
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setTodos: (todosInfo) => dispatch(setTodos(todosInfo)),
-  setTodosDate: (date) => dispatch(setTodoDate(date))
+  setTodosDate: (date) => dispatch(setTodoDate(date)),
+  setSortList: (nameList, sortedTodoLists) => dispatch(setSortList(nameList, sortedTodoLists))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Project));
