@@ -7,3 +7,29 @@
   letter-spacing: 3px;
   font-weight: 500;
 }
+
+
+:global .Project-modifyPoject {
+  margin-top: 40px;
+}
+
+:global .Project-modifyPoject li {
+  margin-bottom: 15px;
+}
+
+:global .Project-modifyPoject li .inputWrap {
+  margin-top: 8px;
+}
+
+:global .Project-modifyPoject .flexRow {
+  align-items: flex-end;
+}
+
+:global .Project-modifyPoject .warning_text {
+  padding-top: 8px;
+}
+
+
+.btnSubmitModifyProject{
+  margin-top:20px;
+}

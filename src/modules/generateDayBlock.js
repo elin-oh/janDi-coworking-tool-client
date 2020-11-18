@@ -51,7 +51,6 @@ for (let i = 0; i < 12; i++) {
   dayList.push(lastDate);
 }
 
-console.log(dayList)
 
 export const generateJandi = function () {
   let totalDayList = [];

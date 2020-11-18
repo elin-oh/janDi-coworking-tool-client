@@ -65,13 +65,11 @@ class Main extends Component {
 
   onChangeInput(e) {
     let { name, value } = e.target;
-
     if (name === "memberInput") {
       this.setState({
         errorMessage: ""
       })
     }
-
     this.setState({
       [name]: value
     })

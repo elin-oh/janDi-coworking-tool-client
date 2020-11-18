@@ -25,9 +25,9 @@ export const setProjects = (projectLists) => {
     })
 };
 
-export const setTodos = (todoLists) => {
+export const setTodos = (todosInfo) => {
     return ({
         type: types.SET_TODOS,
-        todoLists
+        todosInfo
     })
 };

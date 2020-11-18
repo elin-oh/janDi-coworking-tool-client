@@ -1,21 +1,23 @@
 import * as types from '../actions/ActionTypes';
 
+let date = new Date().toISOString().slice(0, 10)
 const initialState = {
-  todos: []
+  todosInfo: [],
+  date: date
 };
 
 
-function todosController(state = initialState, action) {
+function todoController(state = initialState, action) {
   // 레퍼런스 생성
   switch (action.type) {
     case types.SET_TODOS:
       return {
         ...state,
-        todos: action.todos
+        todosInfo: action.todosInfo
       };
     default:
       return state;
   }
 }
 
-export default todosController;
+export default todoController;
