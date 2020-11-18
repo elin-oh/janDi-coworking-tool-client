@@ -1,9 +1,8 @@
 import * as types from '../actions/ActionTypes';
 
-let date = new Date().toISOString().slice(0, 10)
 const initialState = {
   todosInfo: [],
-  date: date
+  date: ''
 };
 
 
@@ -14,6 +13,11 @@ function todoController(state = initialState, action) {
       return {
         ...state,
         todosInfo: action.todosInfo
+      };
+    case types.SET_TODO_DATE:
+      return {
+        ...state,
+        date: action.date
       };
     default:
       return state;

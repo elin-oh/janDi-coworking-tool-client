@@ -31,3 +31,10 @@ export const setTodos = (todosInfo) => {
         todosInfo
     })
 };
+
+export const setTodoDate = (date) => {
+    return ({
+        type: types.SET_TODO_DATE,
+        date
+    })
+};

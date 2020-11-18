@@ -12,7 +12,7 @@ const TodoLists = (props) => (
     {
       props.todoLists &&
       props.todoLists.map(item => (
-        <TodoItem todo={item} />
+        <TodoItem todo={item} key={item.id} />
       ))
     }
 

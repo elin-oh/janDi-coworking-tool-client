@@ -10,7 +10,6 @@ class TodoListWrapper extends Component {
 
   constructor(props) {
     super(props)
-
     this.state = {
       sortedTodoLists: {},
       nameList: []
@@ -19,15 +18,12 @@ class TodoListWrapper extends Component {
 
   componentDidMount() {
     this.mapTodoList();
-    console.log(this.state.sortedTodoLists);
   }
 
 
   mapTodoList() {
-    if (this.props.todolists) {
-      this.props.todolists.forEach(item => {
-        console.log(item.user.userName);
-        console.log(this.state.nameList.includes(item.user.userName));
+    if (this.props.todoinfos.todolists) {
+      this.props.todoinfos.todolists.forEach(item => {
         if (this.state.nameList.includes(item.user.userName) === false) {
           let nameListSlice = this.state.nameList.slice();
           nameListSlice.push(item.user.userName);
@@ -44,22 +40,32 @@ class TodoListWrapper extends Component {
     }
   }
   render() {
-    return (
-      <div className={cx('TodoListWrapper')}>
-        {
-          this.state.nameList.map(item => (
-            <TodoLists todoLists={this.state.sortedTodoLists[item]} name={item} />
-          ))
-        }
-      </div>
-    )
+    if (this.state.nameList.length > 0) {
+      return (
+        <div className={cx('TodoListWrapper')}>
+          {
+            this.state.nameList.map(item => {
+              return (
+                <TodoLists todoLists={this.state.sortedTodoLists[item]} name={item} key={item} />
+              )
+            })
+          }
+        </div>
+      )
+    } else {
+      return (
+        <div className={cx('TodoListWrapper')}>
+          <span className="centerGrayText">등록된 투두가 없습니다</span>
+        </div>
+      )
+    }
   }
 }
 
 
 const mapStateToProps = (state) => ({
   // works: state.workReducer.works,
-  todolists: state.todoReducer.todosInfo.project.todolists,
+  todoinfos: state.todoReducer.todosInfo.project,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -12,7 +12,7 @@ import styles from 'styles/Project.css';
 import Popup from 'components/Popup';
 import Button from 'components/Button';
 import MiniButton from 'components/MiniButton';
-import { setTodos } from 'actions';
+import { setTodos, setTodoDate } from 'actions';
 
 const cx = classNames.bind(styles);
 
@@ -32,6 +32,8 @@ class Project extends Component {
 
     let projectId = this.props.location.pathname.split('/')[2];
     let day = new Date().toISOString().slice(0, 10);
+
+    this.props.setTodosDate(day);
 
     //프로젝트 설정
     let project;
@@ -54,7 +56,7 @@ class Project extends Component {
     //   })
     // })
 
-    axios.get(server_path + '/projectinfo?pid=' + projectId + '&day=2020-11-17', { withCredentials: true }).then(res => {
+    axios.get(server_path + '/projectinfo?pid=' + projectId + '&day=' + this.props.targetDate, { withCredentials: true }).then(res => {
       console.log(res.data)
       let filteredMember = res.data.member.filter(item => item !== this.props.userEmail);
       let data = res.data;
@@ -246,11 +248,13 @@ const mapStateToProps = (state) => ({
   // works: state.workReducer.works,
   projects: state.projectsReducer.projects,
   userEmail: state.userReducer.email,
-  member: state.todoReducer.todosInfo.member
+  member: state.todoReducer.todosInfo.member,
+  targetDate: state.todoReducer.date,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setTodos: (todosInfo) => dispatch(setTodos(todosInfo))
+  setTodos: (todosInfo) => dispatch(setTodos(todosInfo)),
+  setTodosDate: (date) => dispatch(setTodoDate(date))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Project));
