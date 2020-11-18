@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { withCookies, Cookies } from 'react-cookie';
 import Header from 'components/Header';
+import Button from 'components/Button'
+import Popup from 'components/Popup';
+import MiniButton from 'components/MiniButton'
 import JandiGround from 'containers/JandiGround';
 import styles from 'styles/Project.css';
-import TodoList from 'components/TodoList'
+import TodoList from 'components/todolist'
 import TodoInput from 'components/TodoInput'
 import TodoItemList from 'components/TodoItemList';
-import Popup from 'components/Popup';
-import Button from 'components/Button'
 import classNames from 'classnames/bind'
-import MiniButton from 'components/MiniButton'
 import axios from 'axios';
-import server_path from 'module'
+import { server_path } from 'modules/path.js'
+import { setTodos } from 'actions';
+
 
 const cx = classNames.bind(styles);
 
@@ -28,21 +33,19 @@ class Project extends Component {
       member: [
         "",
       ],
-      todoLists: [
-        { id: 0, title: '' }
-      ],
+      todoLists: [],
       //
       // todo리스트 처리용 정보
-      input: '',
+      todoInput: '',
       projectId: 0,
       userId: 0,
       isChecked: false,
-      todos: [  //이건 이렇게 나누는게 맞는건가?
+      todos: [
         {
           id: 0,
-          body: "",
+          body: "test",
           isChecked: false
-        },
+        }
       ]
     }
     this.handleChange = this.handleChange.bind(this);
@@ -51,7 +54,26 @@ class Project extends Component {
   }
 
   componentDidMount() {
-    //console.log(this.element)
+
+
+    let { cookies } = this.props;
+
+    if (!cookies.cookies.userId) {
+      this.props.history.push('/login');
+    }
+    axios.get(server_path + 'project', {
+      withCredentials: true
+    })
+      .then(res => {
+        console.log(res.data)
+        this.props.setTodos(res.data);
+      }).catch(error => {
+        if (error.response && error.response.status === 401) {
+          cookies.remove('userId');
+          this.props.history.push('/login')
+        }
+      })
+
     for (let el of this.state.todoLists) {
       this.jandiEl[el.id].scrollLeft = this.jandiEl[el.id].scrollWidth - this.jandiEl[el.id].offsetWidth;
     }
@@ -87,23 +109,23 @@ class Project extends Component {
 
   handleChange(e) {
     this.setState({
-      input: e.target.value
+      todoInput: e.target.value
     })
   }
 
   handleCreate() {
-    const { input, projectId, userId, isChecked } = this.state;
-    if (!input) {
+    const { todoInput, projectId, userId, isChecked } = this.state;
+    if (!todoInput) {
       this.setState({
         errorMessage: "내용을 입력하세요."
       })
     } else {
       axios.post(server_path + '/todolistpost', {
-        body: input,
+        body: this.state.todoInput,
         projectId,
         userId: userId,
         isChecked
-      })
+      }, { withCredentials: true })
         .then(res => console.log(res))
         .catch(error => {
           if (error.response && error.response.status === 422) {
@@ -113,10 +135,10 @@ class Project extends Component {
           }
         })
       // this.setState({
-      //   input: '',
+      //   todoInput: '',
       //   todos: todos.concat({
       //     id: this.id++,
-      //     body: input,
+      //     body: todoInput,
       //     isChecked: false
       //   })
       // })
@@ -177,10 +199,15 @@ class Project extends Component {
               <div onClick={this.onOpenPopup.bind(this)}>
                 <Button >프로젝트 수정하기</Button>
               </div>
-
+              <select name="member">
+                <option value="">팀원선택</option>
+                <option value="member1">member1</option>
+                <option value="member2">member2</option>
+                <option value="member3">member3</option>
+              </select>
             </ul>
             <TodoList TodoInput={(
-              <TodoInput value={this.state.input} onKeyPress={this.handleKeyPress} onChange={this.handleChange} onCreate={this.handleCreate} />)}>
+              <TodoInput value={this.state.todoInput} onKeyPress={this.handleKeyPress} onChange={this.handleChange} onCreate={this.handleCreate} />)}>
               {this.state.errorMessage && <div className="warning_text">{this.state.errorMessage}</div>}
               <TodoItemList todos={this.state.todos} onToggle={this.handleToggle} onRemove={this.hanleRemove} />
             </TodoList>
@@ -236,4 +263,15 @@ class Project extends Component {
   }
 }
 
-export default Project;
+
+const mapStateToProps = (state) => ({
+  // works: state.workReducer.works,
+  todos: state.todosReducer.todos
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setTodos: (todos) => dispatch(setTodos(todos))
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Project));

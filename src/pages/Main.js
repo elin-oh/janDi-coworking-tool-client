@@ -11,6 +11,7 @@ import axios from 'axios';
 import styles from '../styles/Main.css';
 import { server_path } from 'modules/path.js';
 import { setProjects } from 'actions';
+
 // const cx = classNames.bind(styles);
 
 class Main extends Component {
