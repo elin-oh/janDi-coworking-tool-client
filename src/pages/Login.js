@@ -40,8 +40,8 @@ class Login extends Component {
         errorMessage: "아이디 또는 비밀번호를 입력하세요."
       })
     } else {
-      console.log("====================", this.state)
-      console.log('====================cookie', this.props)
+      // console.log("====================", this.state)
+      // console.log('====================cookie', this.props)
       axios.post(server_path + '/login', {
         email: emailId,
         password

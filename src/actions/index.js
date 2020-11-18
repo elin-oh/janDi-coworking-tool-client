@@ -24,3 +24,10 @@ export const setProjects = (projectLists) => {
         projectLists
     })
 };
+
+export const setTodos = (todoLists) => {
+    return ({
+        type: types.SET_TODOS,
+        todoLists
+    })
+};
