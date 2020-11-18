@@ -43,8 +43,18 @@ function todoController(state = initialState, action) {
         }
       };
     case types.DELETE_TODO:
-      return {
-      };
+    // return {
+    //   ...state,
+    //   todosInfo: {
+    //     ...state.todosInfo,
+    //     project: {
+    //       ...state.todosInfo.project,
+    //       todolists: [
+    //         ...state.todosInfo.project.todolists.filter(item => item.id !== action.id)
+    //       ]
+    //     }
+    //   }
+    // };
     default:
       return state;
   }

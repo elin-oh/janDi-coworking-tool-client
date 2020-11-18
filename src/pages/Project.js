@@ -48,9 +48,9 @@ class Project extends Component {
       }
     }
 
-    let day = new Date().toISOString().slice(0, 10);
+    let day = this.getToday();
     this.props.setTodosDate(day);
-    console.log(projectId);
+
     axios.get(server_path + '/projectinfo?pid=' + projectId + '&day=' + this.props.targetDate, { withCredentials: true }).then(res => {
       console.log(res.data);
       let filteredMember = res.data.member.filter(item => item !== this.props.userEmail);
@@ -61,7 +61,14 @@ class Project extends Component {
       console.log(error);
     })
   }
+  getToday() {
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = ("0" + (1 + date.getMonth())).slice(-2);
+    let day = ("0" + date.getDate()).slice(-2);
 
+    return year + '-' + month + '-' + day;
+  }
   onOpenPopup() {
     this.setState({
       isPopupOpen: true
@@ -158,6 +165,26 @@ class Project extends Component {
     }
 
   }
+  handleDeleteTodo(id) {
+    console.log(id);
+    axios.delete(server_path + '/todolistdelete', {
+      id
+    }).then(res => {
+      console.log(res);
+    })
+  }
+
+  onLoadData() {
+    let projectId = this.props.location.pathname.split('/')[2];
+    axios.get(server_path + '/projectinfo?pid=' + projectId + '&day=' + this.props.targetDate, { withCredentials: true }).then(res => {
+      let filteredMember = res.data.member.filter(item => item !== this.props.userEmail);
+      let data = res.data;
+      data.member = filteredMember;
+      this.props.setTodos(data);
+    }).catch(error => {
+      console.log(error);
+    })
+  }
 
   render() {
     return (
@@ -172,9 +199,9 @@ class Project extends Component {
                 <JandiGround todoLists={this.state.project} method={this.handleClickTodo.bind(this, this.state.project)} />
               </div>
             </div>
-            <TodoInput member={this.state.member} onOpenModifyPopup={this.onOpenPopup.bind(this)} projectId={this.state.projectId} />
+            <TodoInput member={this.state.member} onOpenModifyPopup={this.onOpenPopup.bind(this)} projectId={this.state.projectId} onLoadData={this.onLoadData.bind(this)} />
 
-            <TodoListWrapper />
+            <TodoListWrapper onDeleteTodo={this.handleDeleteTodo.bind(this)} onLoadData={this.onLoadData.bind(this)} />
           </div>{/* App-contents */}
           {this.state.isPopupOpen ? (
             <Popup open onClosePopup={this.handleClosePopup.bind(this)}>

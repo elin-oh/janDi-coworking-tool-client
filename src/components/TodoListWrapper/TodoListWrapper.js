@@ -20,9 +20,8 @@ class TodoListWrapper extends Component {
         <div className={cx('TodoListWrapper')}>
           {
             this.props.todolists.map(item => {
-              console.log(item);
               return (
-                <TodoItem todoList={item} key={item.id} />
+                <TodoItem todoList={item} key={item.id} onDeleteTodo={this.props.onDeleteTodo} onLoadData={this.props.onLoadData} />
               )
             })
           }

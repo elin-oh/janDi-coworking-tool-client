@@ -56,15 +56,12 @@ class TodoInput extends Component {
       }
     }
     axios.post(server_path + '/todolistpost', options, { withCredentials: true }).then(res => {
-      let sliced = JSON.parse(JSON.stringify(res.data));
-
-      sliced.user = {};
-      sliced.user.userName = this.props.userName;
-
       this.setState({
         inputTodo: ""
       })
-      this.props.addTodoList(sliced);
+
+      this.props.onLoadData();
+      //this.props.addTodoList(res.data);
     })
   }
 
