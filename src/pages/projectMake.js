@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Header from 'components/Header';
 import JandiGround from 'containers/JandiGround';
 import styles from 'styles/ProjectMake.css';
-import TodoList from 'components/todolist'
+import TodoList from 'components/TodoList'
 import TodoInput from 'components/TodoInput'
 import TodoItemList from 'components/TodoItemList';
 import Popup from 'components/Popup';
@@ -26,24 +26,22 @@ class ProjectMake extends Component {
       //  ** 잔디 처리용 정보
       isAdmin: true,
       member: [
-        "test@test.com",
-        "test1@gmail.com",
-        "test2@naver.com"
+        "",
       ],
       todoLists: [
-        { id: 2, title: 'ProjectB' }
+        { id: 0, title: '' }
       ],
       //
       // todo리스트 처리용 정보
       input: '',
-      projectId: 1,
-      userId: 1,
+      projectId: 0,
+      userId: 0,
       isChecked: false,
       todos: [  //이건 이렇게 나누는게 맞는건가?
         {
-          id: 2,
-          body: "todolist 1",
-          isChecked: true
+          id: 0,
+          body: "",
+          isChecked: false
         },
       ]
     }
@@ -57,6 +55,9 @@ class ProjectMake extends Component {
     for (let el of this.state.todoLists) {
       this.jandiEl[el.id].scrollLeft = this.jandiEl[el.id].scrollWidth - this.jandiEl[el.id].offsetWidth;
     }
+
+
+
 
   }
 

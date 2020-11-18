@@ -44,6 +44,9 @@ class Main extends Component {
     }
 
   }
+  componentDidUpdate() {
+
+  }
 
   onOpenPopup() {
     this.setState({
