@@ -41,7 +41,7 @@ class Login extends Component {
       })
     } else {
       //console.log("====================", this.state)
-      axios.post(server_path, {
+      axios.post(server_path + '/login', {
         email: emailId,
         password
       }, { withCredentials: true }).then(res => {

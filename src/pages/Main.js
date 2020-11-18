@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { withCookies, Cookies } from 'react-cookie';
 import Header from 'components/Header';
 import Button from 'components/Button';
 import Popup from 'components/Popup';
 import MiniButton from 'components/MiniButton';
 import JandiGround from 'containers/JandiGround';
-import axios from 'axios'
+import axios from 'axios';
 import styles from '../styles/Main.css';
 import { server_path } from 'modules/path.js';
+import { setProjects } from 'actions';
 // const cx = classNames.bind(styles);
 
 class Main extends Component {
@@ -15,34 +19,33 @@ class Main extends Component {
     this.jandiEl = [];
     this.state = {
       isPopupOpen: false,
-      todoLists: [
-        {
-          id: 2,
-          title: 'ProjectB'
-        },
-        {
-          id: 3,
-          title: 'ProjectA'
-        },
-        {
-          id: 4,
-          title: 'ProjectC'
-        }
-      ]
+      todoLists: [],
+      projectNameInput: "",
+      memberInput: "",
+      memberLists: []
     }
   }
 
   componentDidMount() {
+    let { cookies } = this.props;
 
+    if (!cookies.cookies.userId) {
+      this.props.history.push('/login')
+    }
     axios.get(server_path + '/main', { withCredentials: true }).then(res => {
-      console.log(res.data);
-    })
+      this.props.setProjects(res.data);
+    }).catch(error => {
+      if (error.response && error.response.status === 401) {
+        //쿠키삭제
+        cookies.remove('userId');
+        this.props.history.push('/login');
+      }
 
+    })
     //스크롤조정
     for (let el of this.state.todoLists) {
       this.jandiEl[el.id].scrollLeft = this.jandiEl[el.id].scrollWidth - this.jandiEl[el.id].offsetWidth;
     }
-
   }
 
   onOpenPopup() {
@@ -55,11 +58,40 @@ class Main extends Component {
       isPopupOpen: false
     })
   }
-  handleScroll(e) {
 
+  onChangeInput(e) {
+    let { name, value } = e.target;
+
+    this.setState({
+      [name]: value
+    })
   }
 
+  onClickBtnInvite(e) {
+    let memLi = this.state.memberLists;
+    memLi.push(this.state.memberInput);
+    this.setState({
+      memberInput: '',
+      memberLists: memLi
+    });
+  }
 
+  onCreateProject() {
+    axios.post(server_path + '/projectpost', {
+      projectName: this.state.projectNameInput,
+      member: this.state.memberLists
+    }, { withCredentials: true }).then(res => {
+      console.log(res);
+    })
+  }
+
+  deleteMember(index) {
+    let memLi = this.state.memberLists;
+    memLi.splice(index, 1);
+    this.setState({
+      memberLists: memLi
+    })
+  }
 
   render() {
     return (
@@ -72,20 +104,23 @@ class Main extends Component {
               <Button >프로젝트 생성하기</Button>
             </div>
 
-            <ul className="Main-projectList" onScroll={this.handleScroll.bind(this)}>
+            <ul className="Main-projectList" >
               {
-                this.state.todoLists.map(item => (
+                this.props.projects.map(item => (
                   <li key={item.id} >
-                    <h4>{item.title}</h4>
-                    <div className="Main-JandiGround" ref={(el) => { this.jandiEl[item.id] = el }} >
-                      <JandiGround title={item.tile} />
+                    <Link to={`/projectmake/${item.id}`}>
+                      <h4>{item.projectName}</h4>
+                    </Link>
+                    <div className="Main-JandiGroundWrapper">
+                      <div className="Main-JandiGround" ref={(el) => { this.jandiEl[item.id] = el }} >
+                        <JandiGround title={item.tile} todoLists={item.todolists} />
+                      </div>
                     </div>
+
                   </li>
                 ))
               }
             </ul>
-
-
           </div>{/* App-contents */}
 
           {this.state.isPopupOpen ? (
@@ -96,33 +131,38 @@ class Main extends Component {
                 <li>
                   <h4>프로젝트 이름</h4>
                   <div className="inputWrap">
-                    <input placeholder="name" />
+                    <input placeholder="name" onChange={this.onChangeInput.bind(this)} value={this.state.projectNameInput} name="projectNameInput" />
                   </div>
                 </li>
                 <li>
                   <h4>멤버 초대</h4>
                   <div className="flex justCen alignEnd">
                     <div className="inputWrap">
-                      <input placeholder="name" />
+                      <input placeholder="member" onChange={this.onChangeInput.bind(this)} value={this.state.memberInput} name="memberInput" />
                     </div>
-                    <MiniButton classList={['posRel']}>초대</MiniButton>
+                    <div onClick={this.onClickBtnInvite.bind(this)}>
+                      <MiniButton classList={['posRel']}>초대</MiniButton>
+                    </div>
                   </div>
 
                   <ul className="addedMemberList">
-                    <li className="flex">
-                      <span>test@test.com</span>
-                      <img src="/img/btn_delete_member.png" alt="멤버 삭제" className="btnDelete" />
-                    </li>
-                    <li className="flex">
-                      <span>test@test.com</span>
-                      <img src="/img/btn_delete_member.png" alt="멤버 삭제" className="btnDelete" />
-                    </li>
-                    <li className="flex">
-                      <span>test@test.com</span>
-                      <img src="/img/btn_delete_member.png" alt="멤버 삭제" className="btnDelete" />
-                    </li>
+                    {
+                      this.state.memberLists.length > 0 &&
+                      this.state.memberLists.map((item, index) => {
+                        return (
+                          <li className="flex" key={index} data-key={index}>
+                            <span>{item}</span>
+                            <div onClick={this.deleteMember.bind(this, index)}>
+                              <img src="/img/btn_delete_member.png" alt="멤버 삭제" className="btnDelete" />
+                            </div>
+                          </li>
+                        )
+                      })
+                    }
                   </ul>
-                  <Button >프로젝트 생성하기</Button>
+                  <div onClick={this.onCreateProject.bind(this)}>
+                    <Button >프로젝트 생성하기</Button>
+                  </div>
                 </li>
               </ul>
             </Popup>
@@ -134,4 +174,13 @@ class Main extends Component {
   }
 }
 
-export default Main;
+const mapStateToProps = (state) => ({
+  // works: state.workReducer.works,
+  projects: state.projectsReducer.projects
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setProjects: (projectLists) => dispatch(setProjects(projectLists))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Main));

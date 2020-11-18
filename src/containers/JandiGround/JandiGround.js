@@ -13,11 +13,7 @@ class JandiGround extends PureComponent {
     super(props)
     let JandiDayList = generateJandi();
     this.state = {
-      jandiDay: JandiDayList,
-      todoLists: [{
-        "2020-10-30": 8,
-        "2020-11-01": 2
-      }]
+      jandiDay: JandiDayList
     }
   }
 
@@ -30,12 +26,11 @@ class JandiGround extends PureComponent {
         {
           this.state.jandiDay &&
           this.state.jandiDay.map(item => {
-            if (this.state.todoLists[0][item]) {
-              return (<JandiHana dataKey={item} key={item} count={this.state.todoLists[0][item]} />)
+            if (this.props.todoLists && this.props.todoLists[item]) {
+              return (<JandiHana dataKey={item} key={item} count={this.props.todoLists[item]} />)
             } else {
               return (<JandiHana dataKey={item} key={item} />)
             }
-
           })
         }
       </div>
