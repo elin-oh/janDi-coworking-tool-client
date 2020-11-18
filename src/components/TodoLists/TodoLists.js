@@ -8,7 +8,7 @@ const cx = classNames.bind(styles);
 
 const TodoLists = (props) => (
   <div className="TodoListsWrapper">
-    <span className={cx('title')}>{props.name}의 오늘의 할 일</span>
+    {/* <span className={cx('title')}>{props.name}의 오늘의 할 일</span> */}
     {
       props.todoLists &&
       props.todoLists.map(item => (

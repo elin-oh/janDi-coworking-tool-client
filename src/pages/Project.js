@@ -12,7 +12,7 @@ import styles from 'styles/Project.css';
 import Popup from 'components/Popup';
 import Button from 'components/Button';
 import MiniButton from 'components/MiniButton';
-import { setTodos, setTodoDate, setSortList } from 'actions';
+import { setTodos, setTodoDate } from 'actions';
 
 const cx = classNames.bind(styles);
 
@@ -24,8 +24,6 @@ class Project extends Component {
       memberInput: "",
       memberLists: [],
       projectNameInput: "",
-      sortedTodoLists: {},
-      nameList: [],
       project: {}
 
     }
@@ -33,13 +31,10 @@ class Project extends Component {
 
   componentDidMount() {
 
-
-
     let projectId = this.props.location.pathname.split('/')[2];
-
     //프로젝트 설정
     let project;
-    if (this.props.projects.length > 0) {
+    if (this.props.projects && this.props.projects.length > 0) {
       project = this.props.projects.filter(item => {
         return item.id == projectId;
       });
@@ -50,52 +45,21 @@ class Project extends Component {
           memberLists: this.props.member,
           project: project[0],
         })
-        console.log(this.state.project)
       }
     }
 
     let day = new Date().toISOString().slice(0, 10);
     this.props.setTodosDate(day);
-
+    console.log(projectId);
     axios.get(server_path + '/projectinfo?pid=' + projectId + '&day=' + this.props.targetDate, { withCredentials: true }).then(res => {
-
+      console.log(res.data);
       let filteredMember = res.data.member.filter(item => item !== this.props.userEmail);
       let data = res.data;
       data.member = filteredMember;
       this.props.setTodos(data);
-
-      //sorting 저장
-      this.sortingLists();
-
     }).catch(error => {
-
+      console.log(error);
     })
-  }
-
-  sortingLists() {
-    this.setState({
-      sortedTodoLists: {},
-      nameList: []
-    })
-    if (this.props.todolists.length > 0) {
-      this.props.todolists.forEach(item => {
-
-        if (this.state.nameList.includes(item.user.userName) === false) {
-          let nameListSlice = this.state.nameList.slice();
-          nameListSlice.push(item.user.userName);
-          this.setState({
-            nameList: nameListSlice
-          })
-        }
-        if (this.state.sortedTodoLists[item.user.userName]) {
-          this.state.sortedTodoLists[item.user.userName].push(item)
-        } else {
-          this.state.sortedTodoLists[item.user.userName] = []
-        }
-      })
-    }
-
-    this.props.setSortList(this.state.nameList, this.state.sortedTodoLists);
   }
 
   onOpenPopup() {
@@ -157,8 +121,7 @@ class Project extends Component {
       data.member = filteredMember;
       this.props.setTodos(data);
 
-      //sorting 저장
-      this.sortingLists();
+
     }).catch(error => {
 
     })
@@ -209,7 +172,7 @@ class Project extends Component {
                 <JandiGround todoLists={this.state.project} method={this.handleClickTodo.bind(this, this.state.project)} />
               </div>
             </div>
-            <TodoInput member={this.state.member} onOpenModifyPopup={this.onOpenPopup.bind(this)} projectId={this.state.projectId} onSorting={this.sortingLists.bind(this)} />
+            <TodoInput member={this.state.member} onOpenModifyPopup={this.onOpenPopup.bind(this)} projectId={this.state.projectId} />
 
             <TodoListWrapper />
           </div>{/* App-contents */}
@@ -275,20 +238,16 @@ class Project extends Component {
 
 
 const mapStateToProps = (state) => ({
-  // works: state.workReducer.works,
   projects: state.projectsReducer.projects,
   userEmail: state.userReducer.email,
-  member: state.todoReducer.todosInfo.member,
+  //member: state.todoReducer.todosInfo.member,
   targetDate: state.todoReducer.date,
   todolists: state.todoReducer.todosInfo.project.todolists || [],
-  nameList: state.todoReducer.nameList,
-  sortedTodoLists: state.todoReducer.sortedTodoLists
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setTodos: (todosInfo) => dispatch(setTodos(todosInfo)),
-  setTodosDate: (date) => dispatch(setTodoDate(date)),
-  setSortList: (nameList, sortedTodoLists) => dispatch(setSortList(nameList, sortedTodoLists))
+  setTodosDate: (date) => dispatch(setTodoDate(date))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Project));

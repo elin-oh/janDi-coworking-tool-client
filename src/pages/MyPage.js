@@ -9,7 +9,7 @@ import Popup from 'components/Popup';
 import Button from 'components/Button';
 import PersonalJandiGround from 'containers/PersonalJandiGround';
 import axios from 'axios';
-import { setCount, setUser } from 'actions';
+import { setCount, setUser, setTodos } from 'actions';
 import { server_path } from 'modules/path.js';
 
 const cx = classNames.bind(styles);
@@ -34,6 +34,7 @@ class Mypage extends Component {
   }
 
   componentDidMount() {
+
     //user 정보가 없으면 리다이렉트
     let { cookies } = this.props.cookies;
     if (!cookies.userId) {
@@ -209,7 +210,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   setCount: (todoDoneCount, todoTotalCount) => dispatch(setCount(todoDoneCount, todoTotalCount)),
-  setUser: (email, passLen, userName) => dispatch(setUser(email, passLen, userName))
+  setUser: (email, passLen, userName) => dispatch(setUser(email, passLen, userName)),
+  setTodos: (todosInfo) => dispatch(setTodos(todosInfo)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Mypage));

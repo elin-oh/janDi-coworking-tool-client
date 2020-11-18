@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import styles from './TodoListWrapper.scss';
 import classNames from 'classnames/bind';
-import TodoLists from 'components/TodoLists';
+//import TodoLists from 'components/TodoLists';
+import TodoItem from 'components/TodoItem';
 
 const cx = classNames.bind(styles);
 
@@ -11,21 +12,17 @@ class TodoListWrapper extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      sortedTodoLists: {},
-      nameList: []
     }
   }
-
-
-
   render() {
-    if (this.props.nameList.length > 0) {
+    if (this.props.todolists && this.props.todolists.length > 0) {
       return (
         <div className={cx('TodoListWrapper')}>
           {
-            this.props.nameList.map(item => {
+            this.props.todolists.map(item => {
+              console.log(item);
               return (
-                <TodoLists todoLists={this.props.sortedTodoLists[item]} name={item} key={item} />
+                <TodoItem todoList={item} key={item.id} />
               )
             })
           }
@@ -43,9 +40,7 @@ class TodoListWrapper extends Component {
 
 
 const mapStateToProps = (state) => ({
-  // works: state.workReducer.works,
-  sortedTodoLists: state.todoReducer.sortedTodoLists,
-  nameList: state.todoReducer.nameList
+  todolists: state.todoReducer.todosInfo.project.todolists || [],
 });
 
 const mapDispatchToProps = (dispatch) => ({

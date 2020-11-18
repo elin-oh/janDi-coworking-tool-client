@@ -4,6 +4,7 @@ const initialState = {
   todosInfo: [],
   date: '',
   nameList: [],
+  member: "",
   sortedTodoLists: {}
 };
 
@@ -40,6 +41,9 @@ function todoController(state = initialState, action) {
             ]
           }
         }
+      };
+    case types.DELETE_TODO:
+      return {
       };
     default:
       return state;

@@ -16,7 +16,7 @@ class TodoInput extends Component {
     this.state = {
       inputTodo: "",
       targetMember: "",
-
+      isAdmin: false
     }
   }
   onChangeInput(e) {
@@ -56,16 +56,15 @@ class TodoInput extends Component {
       }
     }
     axios.post(server_path + '/todolistpost', options, { withCredentials: true }).then(res => {
-
-      console.log(res.data);
       let sliced = JSON.parse(JSON.stringify(res.data));
 
       sliced.user = {};
       sliced.user.userName = this.props.userName;
-      console.log(sliced);
 
+      this.setState({
+        inputTodo: ""
+      })
       this.props.addTodoList(sliced);
-      this.props.onSorting();
     })
   }
 
@@ -74,7 +73,7 @@ class TodoInput extends Component {
       <div className={cx("TodoInput")}>
 
         {/* 관리자한테만 보이는 라인 */}
-        {this.props.isAdmin ? (
+        {this.state.isAdmin ? (
           <div className={cx('adminSelection')}>
             <select onChange={this.selectMember.bind(this)}>
               <option>::팀원선택::</option>
@@ -101,9 +100,9 @@ class TodoInput extends Component {
 
 
 const mapStateToProps = (state) => ({
-  userName: state.userReducer.userName,
-  member: state.todoReducer.todosInfo.member,
-  isAdmin: state.todoReducer.todosInfo.project.adminUserId
+  // userName: state.userReducer.userName,
+  // member: state.todoReducer.todosInfo.member,
+  // isAdmin: state.todoReducer.todosInfo.project.adminUserId
 });
 
 const mapDispatchToProps = (dispatch) => ({
