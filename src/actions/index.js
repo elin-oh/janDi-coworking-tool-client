@@ -17,3 +17,10 @@ export const setCount = (todoDoneCount, todoTotalCount) => {
         todoTotalCount
     })
 };
+
+export const setProjects = (projectLists) => {
+    return ({
+        type: types.SET_PROJECTS,
+        projectLists
+    })
+};
