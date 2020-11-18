@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Header from 'components/Header';
 import JandiGround from 'containers/JandiGround';
-import styles from 'styles/ProjectMake.css';
+import styles from 'styles/Project.css';
 import TodoList from 'components/TodoList'
 import TodoInput from 'components/TodoInput'
 import TodoItemList from 'components/TodoItemList';
@@ -14,7 +14,7 @@ import server_path from 'module'
 
 const cx = classNames.bind(styles);
 
-class ProjectMake extends Component {
+class Project extends Component {
   constructor(props) {
     super(props)
     this.id = 5;
@@ -236,4 +236,4 @@ class ProjectMake extends Component {
   }
 }
 
-export default ProjectMake;
+export default Project;
