@@ -35,7 +35,7 @@ select {
 }
 
 :global .App-contents{
-  height: calc(100vh - 55px);
+  height: calc(100% - 55px);
   padding:0 20px;
   overflow-y: auto;
 }
@@ -140,6 +140,7 @@ input::placeholder{
 
 :global .warning_text{
   position: relative;
+  display: inline-block;
   font-size: 0.9rem;
   color:#E86662;
   padding-left: 10px;
@@ -151,4 +152,10 @@ input::placeholder{
   position: absolute;
   left: 0px;
   align-items: center;
+}
+
+
+:global .ovScroll{
+  overflow-y: auto;
+  height: calc(100vh - 55px);
 }

@@ -11,12 +11,15 @@
   align-items: flex-end;
 }
 
+:global .MainCreatePoject .warning_text{
+  padding-top: 8px;
+}
+
 :global .addedMemberList{
   margin-top:23px;
   color:#B8B8B8;
   max-height:80px;
   overflow-y:auto;
-  margin-bottom:20px;
 }
 
 
@@ -48,4 +51,8 @@
   color:#B8B8B8;
   font-style: italic;
   letter-spacing: -1px;
+}
+
+.btnSubmitCreateProject {
+  margin-top:20px;
 }
