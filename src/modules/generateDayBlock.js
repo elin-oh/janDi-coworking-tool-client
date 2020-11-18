@@ -45,12 +45,13 @@ for (let i = 0; i < 12; i++) {
 
   if (month > 12) {
     month = month - 12;
+    year++;
   }
   let lastDate = new Date(year, month, 0).getDate();
   dayList.push(lastDate);
 }
 
-
+console.log(dayList)
 
 export const generateJandi = function () {
   let totalDayList = [];
@@ -60,6 +61,7 @@ export const generateJandi = function () {
   let date = start.getDate();
 
   let pointer = 0;
+  totalDayList.push(`${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`);
   while (endDate !== `${year}-${month}-${date}`) {
     if (date >= dayList[pointer]) {
       if (month >= 12) {
