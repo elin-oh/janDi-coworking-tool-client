@@ -56,6 +56,8 @@ class TodoInput extends Component {
       }
     }
     axios.post(server_path + '/todolistpost', options, { withCredentials: true }).then(res => {
+
+      console.log(res.data);
       let sliced = JSON.parse(JSON.stringify(res.data));
 
       sliced.user = {};

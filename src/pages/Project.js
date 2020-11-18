@@ -20,21 +20,23 @@ class Project extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      project: {},
       isPopupOpen: false,
       memberInput: "",
       memberLists: [],
       projectNameInput: "",
       sortedTodoLists: {},
-      nameList: []
+      nameList: [],
+      project: {}
+
     }
   }
 
   componentDidMount() {
 
+
+
     let projectId = this.props.location.pathname.split('/')[2];
-    let day = new Date().toISOString().slice(0, 10);
-    this.props.setTodosDate(day);
+
     //프로젝트 설정
     let project;
     if (this.props.projects.length > 0) {
@@ -44,12 +46,17 @@ class Project extends Component {
       if (project.length > 0) {
         this.setState({
           projectId,
-          project: project[0],
           projectNameInput: project[0].projectName,
-          memberLists: this.props.member
+          memberLists: this.props.member,
+          project: project[0],
         })
+        console.log(this.state.project)
       }
     }
+
+    let day = new Date().toISOString().slice(0, 10);
+    this.props.setTodosDate(day);
+
     axios.get(server_path + '/projectinfo?pid=' + projectId + '&day=' + this.props.targetDate, { withCredentials: true }).then(res => {
 
       let filteredMember = res.data.member.filter(item => item !== this.props.userEmail);
@@ -61,9 +68,7 @@ class Project extends Component {
       this.sortingLists();
 
     }).catch(error => {
-      this.setState({
-        project: {}
-      })
+
     })
   }
 
@@ -74,7 +79,7 @@ class Project extends Component {
     })
     if (this.props.todolists.length > 0) {
       this.props.todolists.forEach(item => {
-        console.log(item);
+
         if (this.state.nameList.includes(item.user.userName) === false) {
           let nameListSlice = this.state.nameList.slice();
           nameListSlice.push(item.user.userName);
@@ -146,6 +151,7 @@ class Project extends Component {
   }
   handleClickTodo(project, e) {
     axios.get(server_path + '/projectinfo?pid=' + project.id + '&day=' + e.target.dataset.key, { withCredentials: true }).then(res => {
+      console.log(res.data);
       let filteredMember = res.data.member.filter(item => item !== this.props.userEmail);
       let data = res.data;
       data.member = filteredMember;
@@ -154,9 +160,7 @@ class Project extends Component {
       //sorting 저장
       this.sortingLists();
     }).catch(error => {
-      this.setState({
-        project: {}
-      })
+
     })
   }
   deleteMember(index) {
@@ -176,7 +180,6 @@ class Project extends Component {
       });
       return;
     } else {
-      console.log(this.state.project.id, this.state.projectNameInput, this.state.memberLists)
       axios.put(server_path + '/projectchange', {
         id: this.state.project.id,
         projectName: this.state.projectNameInput,
