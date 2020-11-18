@@ -49,6 +49,9 @@ class Main extends Component {
       this.jandiEl[el.id].scrollLeft = this.jandiEl[el.id].scrollWidth - this.jandiEl[el.id].offsetWidth;
     }
   }
+  componentDidUpdate() {
+
+  }
 
   onOpenPopup() {
     this.setState({
@@ -165,7 +168,7 @@ class Main extends Component {
               {
                 this.props.projects.map(item => (
                   <li key={item.id} >
-                    <Link to={`/projectmake/${item.id}`}>
+                    <Link to={`/project/${item.id}`}>
                       <h4>{item.projectName}</h4>
                     </Link>
                     <div className="Main-JandiGroundWrapper">

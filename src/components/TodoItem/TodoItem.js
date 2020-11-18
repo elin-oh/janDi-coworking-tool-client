@@ -13,7 +13,8 @@ class TodoItem extends Component {
     return (
       <div className={cx("todoItem")} onClick={() => onToggle(id)}>
         <div className={cx("remove")} onClick={(e) => {
-          e.stopPropagation(); {/*onToggle 이 실행되지 않도롤 함*/ }
+          e.stopPropagation();
+          {/*onToggle 이 실행되지 않도롤 함*/ }
           onRemove(id)
         }
         }>&times;</div>
