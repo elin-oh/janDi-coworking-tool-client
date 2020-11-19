@@ -168,3 +168,11 @@ input::placeholder{
   height: 200px;
   color:#BCB7B7;
 }
+
+:global .txt_gray_underline{
+  color: #B8B8B8;
+  font-size: 0.9rem;
+}
+:global .txt_gray_underline:hover{
+  text-decoration: underline;
+}

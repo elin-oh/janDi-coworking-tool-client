@@ -24,7 +24,7 @@ class Main extends Component {
       memberInput: "",
       memberLists: [],
       errorMessage: ""
-    }
+    }0a
   }
 
   componentDidMount() {
@@ -41,7 +41,6 @@ class Main extends Component {
         cookies.remove('userId');
         this.props.history.push('/login');
       }
-
     })
     //스크롤조정
     for (let el of this.props.projects) {

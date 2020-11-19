@@ -10,7 +10,7 @@ class TodoItem extends Component {
   changeCheck(id, e) {
     axios.put(server_path + '/todolistchange', {
       id,
-      isChecked: e.target.checked
+      IsChecked: e.target.checked
     }, { withCredentials: true }).then(res => {
       console.log(res);
       this.props.onLoadData();
@@ -22,7 +22,7 @@ class TodoItem extends Component {
     return (
       <div className={cx('TodoItemWrapper')}>
         <div className={cx('todoCheck')}>
-          <input type="checkbox" id={this.props.todoList.id} onChange={this.changeCheck.bind(this, this.props.todoList.id)} />
+          <input type="checkbox" id={this.props.todoList.id} onChange={this.changeCheck.bind(this, this.props.todoList.id)} checked={this.props.todoList.IsChecked} />
           <label htmlFor={this.props.todoList.id}></label>
           <span>{this.props.todoList.body}</span>
         </div>

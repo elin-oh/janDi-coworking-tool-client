@@ -12,7 +12,7 @@ import styles from 'styles/Project.css';
 import Popup from 'components/Popup';
 import Button from 'components/Button';
 import MiniButton from 'components/MiniButton';
-import { setTodos, setTodoDate } from 'actions';
+import { setTodos, setTodoDate, setProjects } from 'actions';
 
 const cx = classNames.bind(styles);
 
@@ -25,7 +25,6 @@ class Project extends Component {
       memberLists: [],
       projectNameInput: "",
       project: {}
-
     }
   }
 
@@ -52,7 +51,6 @@ class Project extends Component {
     this.props.setTodosDate(day);
 
     axios.get(server_path + '/projectinfo?pid=' + projectId + '&day=' + this.props.targetDate, { withCredentials: true }).then(res => {
-      console.log(res.data);
       let filteredMember = res.data.member.filter(item => item !== this.props.userEmail);
       let data = res.data;
       data.member = filteredMember;
@@ -173,12 +171,22 @@ class Project extends Component {
 
   }
   handleDeleteTodo(id) {
-    console.log(id);
     axios.delete(server_path + '/todolistdelete', {
-      id
+      data: {
+        id
+      },
+      withCredentials: true
     }).then(res => {
-      console.log(res);
+      this.onLoadData();
+      this.onLoadJandi();
+    }).catch(e => {
+      console.log(e)
     })
+  }
+
+  onHandleDataTodo() {
+    this.onLoadData();
+    this.onLoadJandi()
   }
 
   onLoadData() {
@@ -190,6 +198,45 @@ class Project extends Component {
       this.props.setTodos(data);
     }).catch(error => {
       console.log(error);
+    })
+  }
+
+  onLoadJandi() {
+    let { cookies } = this.props;
+    axios.get(server_path + '/main', { withCredentials: true }).then(res => {
+      this.props.setProjects(res.data);
+      let project;
+      if (this.props.projects && this.props.projects.length > 0) {
+        project = this.props.projects.filter(item => {
+          return item.id == this.state.projectId;
+        });
+        if (project.length > 0) {
+          this.setState({
+            project: project[0],
+          })
+        }
+      }
+    }).catch(error => {
+      if (error.response && error.response.status === 401) {
+        //쿠키삭제
+        cookies.remove('userId');
+        this.props.history.push('/login');
+      }
+    })
+  }
+
+  deleteProject() {
+    let id = this.state.projectId;
+    console.log(id)
+    axios.delete(server_path + '/projectdelete', {
+      data: {
+        id
+      },
+      withCredentials: true
+    }).then(res => {
+      this.props.history.push('/');
+    }).catch(e => {
+      console.log(e)
     })
   }
 
@@ -206,7 +253,7 @@ class Project extends Component {
                 <JandiGround todoLists={this.state.project} method={this.handleClickTodo.bind(this, this.state.project)} />
               </div>
             </div>
-            <TodoInput member={this.state.member} onOpenModifyPopup={this.onOpenPopup.bind(this)} projectId={this.state.projectId} onLoadData={this.onLoadData.bind(this)} />
+            <TodoInput member={this.state.member} onOpenModifyPopup={this.onOpenPopup.bind(this)} projectId={this.state.projectId} onLoadData={this.onHandleDataTodo.bind(this)} />
 
             <TodoListWrapper onDeleteTodo={this.handleDeleteTodo.bind(this)} onLoadData={this.onLoadData.bind(this)} />
           </div>{/* App-contents */}
@@ -257,6 +304,8 @@ class Project extends Component {
                     ) : null
                   }
 
+                  <div className="txt_gray_underline" onClick={this.deleteProject.bind(this)}>프로젝트를 삭제하시겠습니까?</div>
+
                   <div className={cx('btnSubmitModifyProject')} onClick={this.onModifyProject.bind(this)}>
                     <Button >프로젝트 수정하기</Button>
                   </div>
@@ -281,7 +330,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   setTodos: (todosInfo) => dispatch(setTodos(todosInfo)),
-  setTodosDate: (date) => dispatch(setTodoDate(date))
+  setTodosDate: (date) => dispatch(setTodoDate(date)),
+  setProjects: (projectLists) => dispatch(setProjects(projectLists))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Project));

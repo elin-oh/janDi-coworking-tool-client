@@ -1,11 +1,15 @@
 import * as types from '../actions/ActionTypes';
 
 const initialState = {
-  todosInfo: [],
+  todosInfo: {
+    member: [],
+    project: {
+      adminUserId: false,
+      todolists: []
+    }
+  },
   date: '',
-  nameList: [],
-  member: "",
-  sortedTodoLists: {}
+  member: ""
 };
 
 
