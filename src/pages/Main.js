@@ -24,7 +24,7 @@ class Main extends Component {
       memberInput: "",
       memberLists: [],
       errorMessage: ""
-    }0a
+    }
   }
 
   componentDidMount() {
