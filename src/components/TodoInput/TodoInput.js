@@ -70,23 +70,19 @@ class TodoInput extends Component {
       <div className={cx("TodoInput")}>
 
         {/* 관리자한테만 보이는 라인 */}
-
-        <div className={cx('adminSelection')}>
-          {this.state.isAdmin ? (
-            <select onChange={this.selectMember.bind(this)}>
+        {this.props.isAdmin ? (
+          <div className={cx('adminSelection')}>
+            {/* <select onChange={this.selectMember.bind(this)}>
               <option>::팀원선택::</option>
               {this.props.member && this.props.member.map((item, index) => (
                 <option key={index}>{item}</option>
               ))}
-            </select>
-          ) : null}
-          <div className={cx('btnModify')} onClick={this.props.onOpenModifyPopup}>
-            <img src="/img/btn_modify_project.png" alt="설정버튼" />
+            </select> */}
+            <div className={cx('btnModify')} onClick={this.props.onOpenModifyPopup}>
+              <img src="/img/btn_modify_project.png" alt="설정버튼" />
+            </div>
           </div>
-
-        </div>
-
-
+        ) : null}
         <div className={cx('inputWrapTodoInput')}>
           <input type="text" placeholder="오늘의 할 일을 입력하세요" value={this.state.inputTodo} onChange={this.onChangeInput.bind(this)} name="inputTodo" />
           <div className={cx('btnCreateTodo')} onClick={this.addTodos.bind(this)}>
@@ -102,7 +98,7 @@ class TodoInput extends Component {
 const mapStateToProps = (state) => ({
   // userName: state.userReducer.userName,
   // member: state.todoReducer.todosInfo.member,
-  // isAdmin: state.todoReducer.todosInfo.project.adminUserId
+  isAdmin: state.todoReducer.todosInfo.project.adminUserId
 });
 
 const mapDispatchToProps = (dispatch) => ({
