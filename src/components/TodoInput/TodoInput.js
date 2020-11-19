@@ -61,7 +61,6 @@ class TodoInput extends Component {
       })
 
       this.props.onLoadData();
-      //this.props.addTodoList(res.data);
     })
   }
 

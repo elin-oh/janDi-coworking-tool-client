@@ -254,7 +254,6 @@ class Project extends Component {
               </div>
             </div>
             <TodoInput member={this.state.member} onOpenModifyPopup={this.onOpenPopup.bind(this)} projectId={this.state.projectId} onLoadData={this.onHandleDataTodo.bind(this)} />
-
             <TodoListWrapper onDeleteTodo={this.handleDeleteTodo.bind(this)} onLoadData={this.onLoadData.bind(this)} />
           </div>{/* App-contents */}
           {this.state.isPopupOpen ? (

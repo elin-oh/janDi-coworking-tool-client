@@ -87,7 +87,6 @@ class Main extends Component {
     axios.post(server_path + '/usercheck', {
       email: this.state.memberInput
     }, { withCredentials: true }).then(res => {
-      console.log(res.data);
       if (res.data.isUser === true) {
         let memLi = this.state.memberLists;
         memLi.push(this.state.memberInput);
@@ -162,18 +161,21 @@ class Main extends Component {
             </div>
             <ul className="Main-projectList" >
               {
-                this.props.projects.map(item => (
-                  <li key={item.id} >
-                    <Link to={`/project/${item.id}`}>
-                      <h4>{item.projectName}</h4>
-                    </Link>
-                    <div className="Main-JandiGroundWrapper">
-                      <div className="Main-JandiGround" ref={(el) => { this.jandiEl[item.id] = el }} >
-                        <JandiGround title={item.tile} todoLists={item.todolists} />
+                this.props.projects.map(item => {
+                  console.log(item);
+                  return (
+                    <li key={item.id} >
+                      <Link to={`/project/${item.id}`}>
+                        <h4>{item.projectName}</h4>
+                      </Link>
+                      <div className="Main-JandiGroundWrapper">
+                        <div className="Main-JandiGround" ref={(el) => { this.jandiEl[item.id] = el }} >
+                          <JandiGround todoLists={item} />
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                ))
+                    </li>
+                  )
+                })
               }
             </ul>
           </div>{/* App-contents */}
