@@ -56,3 +56,8 @@
 .btnSubmitCreateProject {
   margin-top:20px;
 }
+
+
+:global .Project-modifyPoject .txt_gray_underline {
+  margin-top: 15px;
+}

@@ -1,44 +1,35 @@
-:global .MainCreatePoject{
-  margin-top:40px;
+
+:global .App-contents.Project h4{
+  width:100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  letter-spacing: 3px;
+  font-weight: 500;
 }
-:global .MainCreatePoject li{
+
+
+:global .Project-modifyPoject {
+  margin-top: 40px;
+}
+
+:global .Project-modifyPoject li {
   margin-bottom: 15px;
 }
-:global .MainCreatePoject li .inputWrap{
-  margin-top:8px;
+
+:global .Project-modifyPoject li .inputWrap {
+  margin-top: 8px;
 }
-:global .MainCreatePoject .flexRow{
+
+:global .Project-modifyPoject .flexRow {
   align-items: flex-end;
 }
 
-:global .addedMemberList{
-  margin-top:23px;
-  color:#B8B8B8;
-  max-height:80px;
-  overflow-y:auto;
-  margin-bottom:20px;
+:global .Project-modifyPoject .warning_text {
+  padding-top: 8px;
 }
 
 
-:global .btnDelete {
-  display:block;
-  position: relative;
-  top:1px;
-  width:15px;
-  margin-left: 5px;
+.btnSubmitModifyProject{
+  margin-top:20px;
 }
-/* 
-:global .Main-JandiGround{
-  width:100%;
-  margin-top:15px;
-  overflow-x:auto;
-}
-:global .Main-projectList li {
-  margin-top:23px;
-}
-
-:global .Main-projectList li h4{
-  color:#B8B8B8;
-  font-style: italic;
-  letter-spacing: -1px;
-} */
