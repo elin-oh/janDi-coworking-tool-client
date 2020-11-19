@@ -70,19 +70,22 @@ class TodoInput extends Component {
       <div className={cx("TodoInput")}>
 
         {/* 관리자한테만 보이는 라인 */}
-        {this.state.isAdmin ? (
-          <div className={cx('adminSelection')}>
+
+        <div className={cx('adminSelection')}>
+          {this.state.isAdmin ? (
             <select onChange={this.selectMember.bind(this)}>
               <option>::팀원선택::</option>
               {this.props.member && this.props.member.map((item, index) => (
                 <option key={index}>{item}</option>
               ))}
             </select>
-            <div className={cx('btnModify')} onClick={this.props.onOpenModifyPopup}>
-              <img src="/img/btn_modify_project.png" alt="설정버튼" />
-            </div>
+          ) : null}
+          <div className={cx('btnModify')} onClick={this.props.onOpenModifyPopup}>
+            <img src="/img/btn_modify_project.png" alt="설정버튼" />
           </div>
-        ) : null}
+
+        </div>
+
 
         <div className={cx('inputWrapTodoInput')}>
           <input type="text" placeholder="오늘의 할 일을 입력하세요" value={this.state.inputTodo} onChange={this.onChangeInput.bind(this)} name="inputTodo" />

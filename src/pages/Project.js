@@ -101,6 +101,13 @@ class Project extends Component {
       })
       return;
     }
+
+    if (this.state.memberInput === this.props.userEmail) {
+      this.setState({
+        errorMessage: "사용자 본인입니다"
+      })
+      return;
+    }
     axios.post(server_path + '/usercheck', {
       email: this.state.memberInput
     }, { withCredentials: true }).then(res => {
@@ -267,7 +274,7 @@ class Project extends Component {
 const mapStateToProps = (state) => ({
   projects: state.projectsReducer.projects,
   userEmail: state.userReducer.email,
-  //member: state.todoReducer.todosInfo.member,
+  member: state.todoReducer.todosInfo.member,
   targetDate: state.todoReducer.date,
   todolists: state.todoReducer.todosInfo.project.todolists || [],
 });
