@@ -8,6 +8,7 @@ const Menu = (props) => {
   let { cookies } = props;
   function onHandleLogout() {
     cookies.remove('userId');
+    this.props.history.push('/login');
   }
   if (cookies.get('userId') === undefined) {
     return <Redirect to="/login" />

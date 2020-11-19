@@ -130,12 +130,19 @@ class Main extends Component {
         axios.get(server_path + '/main', { withCredentials: true }).then(res => {
           this.props.setProjects(res.data);
         }).catch(error => {
+          console.log(error.response.status === 401);
           if (error.response && error.response.status === 401) {
             //쿠키삭제
             cookies.remove('userId');
             this.props.history.push('/login');
           }
         })
+      }).catch(error => {
+        if (error.response && error.response.status === 401) {
+          //쿠키삭제
+          cookies.remove('userId');
+          this.props.history.push('/login');
+        }
       })
     }
 
@@ -162,7 +169,6 @@ class Main extends Component {
             <ul className="Main-projectList" >
               {
                 this.props.projects.map(item => {
-                  console.log(item);
                   return (
                     <li key={item.id} >
                       <Link to={`/project/${item.id}`}>

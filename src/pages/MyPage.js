@@ -30,6 +30,7 @@ class Mypage extends Component {
       },
       todoDoneCount: 0,
       todoTotalCount: 0,
+      errorMessage: ""
     }
   }
 
@@ -61,21 +62,34 @@ class Mypage extends Component {
   onSubmitNickname(e) {
     let { userName } = this.state.input;
     if (userName === "") {
-      //console.log('안돼요')
+      this.setState({
+        errorMessage: "변경할 닉네임을 입력해주세요"
+      })
+      return;
+    } else if (userName === this.props.userName) {
+      this.setState({
+        errorMessage: "변경할 닉네임이 현재 닉네임과 같습니다"
+      })
       return;
     }
     axios.put(server_path + '/userchange', {
       userName
     }, { withCredentials: true }).then(res => {
+      console.log(res);
       let { email, passLen, userName } = this.state.input;
       this.props.setUser(email, passLen, userName);
       this.setState((prevState) => ({
         isReadonlyUserName: !prevState.isReadonlyUserName
       }))
+    }).catch(e => {
+      console.error(e)
     })
 
   }
   changeInput(e) {
+    this.setState({
+      errorMessage: ""
+    })
     let { name, value } = e.target;
     if (name === 'nickname') {
       this.setState({
@@ -95,22 +109,30 @@ class Mypage extends Component {
   }
   onOpenPopup(e) {
     this.setState({
+      errorMessage: "",
       isPopupOpen: true
     })
   }
   onClosePopup(e) {
     this.setState({
+      errorMessage: "",
       isPopupOpen: false
     })
   }
   submitPassword() {
     let { changePass, changePassCheck, currentPass } = this.state.input;
     if (!changePass || !changePassCheck || !currentPass) {
-      console.log('모든 란을 다 입력해주세요')
+      this.setState({
+        errorMessage: '모든 입력란을 다 입력해주세요'
+      })
     } else if (currentPass === changePass) {
-      console.log('변경할 비밀번호가 현재 비밀번호와 같습니다')
+      this.setState({
+        errorMessage: '변경할 비밀번호가 현재 비밀번호와 같습니다'
+      })
     } else if (changePass !== changePassCheck) {
-      console.log('변경할 비밀번호와 비밀번호 확인은 같아야합니다');
+      this.setState({
+        errorMessage: '변경할 비밀번호와 비밀번호 확인은 같아야합니다'
+      })
     } else {
       axios.put(server_path + '/userchange', {
         currentPassword: currentPass,
@@ -120,6 +142,7 @@ class Mypage extends Component {
         let passLen = changePass.length;
         this.props.setUser(email, passLen, userName);
         this.setState((prevState) => ({
+          errorMessage: '비밀번호가 수정됐습니다',
           isReadonlyUserName: !prevState.isReadonlyUserName
         }))
       })
@@ -164,6 +187,11 @@ class Mypage extends Component {
                 </div>
               </li>
             </ul>
+
+            {this.state.errorMessage !== "" ? (
+              <div className="warning_text">{this.state.errorMessage}</div>
+            ) : null}
+
             <div className="MyPage-graph">
               <h3>
                 개인 성취율 그래프
@@ -192,6 +220,9 @@ class Mypage extends Component {
                 </div>
               </li>
             </ul>
+            {this.state.errorMessage !== "" ? (
+              <div className="warning_text" style={{ marginBottom: '10px' }}>{this.state.errorMessage}</div>
+            ) : null}
             <div onClick={this.submitPassword.bind(this)}>
               <Button bgColor="#FF9300" mdSize>비밀번호 변경하기</Button>
             </div>

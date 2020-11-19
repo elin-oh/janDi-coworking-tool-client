@@ -30,6 +30,10 @@ class Project extends Component {
 
   componentDidMount() {
 
+    let { cookies } = this.props.cookies;
+    if (!cookies.userId) {
+      this.props.history.push('/login')
+    }
     let projectId = this.props.location.pathname.split('/')[2];
     //프로젝트 설정
     let project;
@@ -56,7 +60,11 @@ class Project extends Component {
       data.member = filteredMember;
       this.props.setTodos(data);
     }).catch(error => {
-      console.log(error);
+      if (error.response && error.response.status === 401) {
+        //쿠키삭제
+        cookies.remove('userId');
+        this.props.history.push('/login');
+      }
     })
   }
   getToday() {
@@ -90,6 +98,7 @@ class Project extends Component {
     })
   }
   onClickBtnInvite(e) {
+    let { cookies } = this.props;
     this.setState({
       errorMessage: ""
     })
@@ -122,7 +131,11 @@ class Project extends Component {
         })
       }
     }).catch(error => {
-      console.error(error)
+      if (error.response && error.response.status === 401) {
+        //쿠키삭제
+        cookies.remove('userId');
+        this.props.history.push('/login');
+      }
     })
   }
   handleClickTodo(project, e) {
@@ -163,14 +176,19 @@ class Project extends Component {
         this.setState({
           isPopupOpen: false
         });
-
-      }).catch(e => {
-        console.log(e)
+        this.onLoadJandi();
+      }).catch(error => {
+        if (error.response && error.response.status === 401) {
+          //쿠키삭제
+          cookies.remove('userId');
+          this.props.history.push('/login');
+        }
       })
     }
 
   }
   handleDeleteTodo(id) {
+    let { cookies } = this.props;
     axios.delete(server_path + '/todolistdelete', {
       data: {
         id
@@ -179,8 +197,12 @@ class Project extends Component {
     }).then(res => {
       this.onLoadData();
       this.onLoadJandi();
-    }).catch(e => {
-      console.log(e)
+    }).catch(error => {
+      if (error.response && error.response.status === 401) {
+        //쿠키삭제
+        cookies.remove('userId');
+        this.props.history.push('/login');
+      }
     })
   }
 
@@ -190,6 +212,7 @@ class Project extends Component {
   }
 
   onLoadData() {
+    let { cookies } = this.props;
     let projectId = this.props.location.pathname.split('/')[2];
     axios.get(server_path + '/projectinfo?pid=' + projectId + '&day=' + this.props.targetDate, { withCredentials: true }).then(res => {
       let filteredMember = res.data.member.filter(item => item !== this.props.userEmail);
@@ -197,7 +220,11 @@ class Project extends Component {
       data.member = filteredMember;
       this.props.setTodos(data);
     }).catch(error => {
-      console.log(error);
+      if (error.response && error.response.status === 401) {
+        //쿠키삭제
+        cookies.remove('userId');
+        this.props.history.push('/login');
+      }
     })
   }
 
@@ -226,6 +253,7 @@ class Project extends Component {
   }
 
   deleteProject() {
+    let { cookies } = this.props;
     let id = this.state.projectId;
     console.log(id)
     axios.delete(server_path + '/projectdelete', {
@@ -235,8 +263,12 @@ class Project extends Component {
       withCredentials: true
     }).then(res => {
       this.props.history.push('/');
-    }).catch(e => {
-      console.log(e)
+    }).catch(error => {
+      if (error.response && error.response.status === 401) {
+        //쿠키삭제
+        cookies.remove('userId');
+        this.props.history.push('/login');
+      }
     })
   }
 
