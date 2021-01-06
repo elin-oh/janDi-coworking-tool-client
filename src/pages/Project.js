@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withCookies, Cookies } from 'react-cookie';
 import axios from 'axios';
 import { server_path } from 'modules/path';
 import classNames from 'classnames/bind';
@@ -30,17 +29,16 @@ class Project extends Component {
 
   componentDidMount() {
 
-    let { cookies } = this.props.cookies;
-    if (!cookies.userId) {
-      this.props.history.push('/login')
-    }
     let projectId = this.props.location.pathname.split('/')[2];
+    console.log(projectId)
     //프로젝트 설정
     let project;
     if (this.props.projects && this.props.projects.length > 0) {
       project = this.props.projects.filter(item => {
-        return item.id == projectId;
+        console.log(item.id == projectId)
+        return Number(item.id) === Number(projectId);
       });
+      console.log(project);
       if (project.length > 0) {
         this.setState({
           projectId,
@@ -62,8 +60,6 @@ class Project extends Component {
       this.props.setTodos(data);
     }).catch(error => {
       if (error.response && error.response.status === 401) {
-        //쿠키삭제
-        cookies.remove('userId');
         this.props.history.push('/login');
       }
     })
@@ -162,7 +158,7 @@ class Project extends Component {
 
   onModifyProject() {
     let { cookies } = this.props;
-    let { projectNameInput, memberLists } = this.state;
+    let { projectNameInput } = this.state;
     if (projectNameInput === "") {
       this.setState({
         errorMessage: "프로젝트 이름을 지정해주세요"
@@ -238,7 +234,7 @@ class Project extends Component {
       let project;
       if (this.props.projects && this.props.projects.length > 0) {
         project = this.props.projects.filter(item => {
-          return item.id == this.state.projectId;
+          return item.id === this.state.projectId;
         });
         if (project.length > 0) {
           this.setState({
@@ -288,7 +284,7 @@ class Project extends Component {
                 <JandiGround todoLists={this.state.project} method={this.handleClickTodo.bind(this, this.state.project)} />
               </div>
             </div>
-            <TodoInput member={this.state.member} onOpenModifyPopup={this.onOpenPopup.bind(this)} projectId={this.state.projectId} onLoadData={this.onHandleDataTodo.bind(this)} />
+            <TodoInput member={this.state.member} onOpenModifyPopup={this.onOpenPopup.bind(this)} projectId={this.state.projectId} onLoadData={this.onHandleDataTodo.bind(this)} location={this.props.location}/>
             <TodoListWrapper onDeleteTodo={this.handleDeleteTodo.bind(this)} onLoadData={this.onLoadData.bind(this)} />
           </div>{/* App-contents */}
           {this.state.isPopupOpen ? (
@@ -368,4 +364,4 @@ const mapDispatchToProps = (dispatch) => ({
   setProjects: (projectLists) => dispatch(setProjects(projectLists))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Project));
+export default connect(mapStateToProps, mapDispatchToProps)(Project);

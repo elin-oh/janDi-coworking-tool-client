@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
-import { withCookies, Cookies } from 'react-cookie';
 import styles from 'styles/Login.css';
 import { Link } from 'react-router-dom';
 import Button from 'components/Button';
@@ -32,7 +31,6 @@ class Login extends Component {
   };
 
   handleLogin = () => {
-    const { cookies } = this.props;
     const { emailId, password } = this.state;
     if (!emailId || !password) {
       //console.log("====================", this.state)
@@ -47,7 +45,7 @@ class Login extends Component {
         password
       }, { withCredentials: true }).then(res => {
         let passLen = password.length;
-        cookies.set('userId', res.data.id, { path: '/' });
+        
         this.props.setUser(emailId, passLen, res.data.userName);
         this.props.history.push("/");
       }).catch(error => {
@@ -110,4 +108,5 @@ const mapDispatchToProps = (dispatch) => ({
   setUser: (email, passLen, userName) => dispatch(setUser(email, passLen, userName))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Login));
+export default connect(mapStateToProps, mapDispatchToProps)(
+Login);

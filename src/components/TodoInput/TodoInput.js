@@ -19,6 +19,15 @@ class TodoInput extends Component {
       isAdmin: false
     }
   }
+
+  componentDidMount() {
+    
+    let devided = this.props.location.pathname.split('/');
+    this.setState({
+      projectId:Number(devided[2])
+    })
+  }
+  
   onChangeInput(e) {
     let { name, value } = e.target;
     if (name === "memberInput") {
@@ -45,14 +54,13 @@ class TodoInput extends Component {
     let options = {};
     if (targetMember === "") {
       options = {
-        projectId: this.props.projectId,
+        projectId: this.state.projectId,
         body: inputTodo
       }
     } else {
       options = {
         projectId: this.props.projectId,
-        body: inputTodo,
-        email: targetMember
+        body: inputTodo
       }
     }
     axios.post(server_path + '/todolistpost', options, { withCredentials: true }).then(res => {

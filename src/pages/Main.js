@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { withCookies, Cookies } from 'react-cookie';
 import Header from 'components/Header';
 import Button from 'components/Button';
 import Popup from 'components/Popup';
@@ -28,30 +27,25 @@ class Main extends Component {
   }
 
   componentDidMount() {
-    let { cookies } = this.props;
+    console.log('mount');
 
-    if (!cookies.cookies.userId) {
-      this.props.history.push('/login')
-    }
-    axios.get(server_path + '/main', { withCredentials: true }).then(res => {
-      console.log(res.data);
+    axios.get(server_path + '/main', {withCredentials: true })
+    .then(res => {
+      console.log(res);
       this.props.setProjects(res.data);
     }).catch(error => {
-      if (error.response && error.response.status === 401) {
-        //쿠키삭제
-        cookies.remove('userId');
-        this.props.history.push('/login');
-      }
     })
     //스크롤조정
-    for (let el of this.props.projects) {
-      this.jandiEl[el.id].scrollLeft = this.jandiEl[el.id].scrollWidth - this.jandiEl[el.id].offsetWidth;
+    if(Array.isArray(this.props.projects)){
+      for (let el of this.props.projects) {
+        this.jandiEl[el.id].scrollLeft = this.jandiEl[el.id].scrollWidth - this.jandiEl[el.id].offsetWidth;
+      }
     }
   }
   componentDidUpdate() {
 
   }
-
+  
   onOpenPopup() {
     this.setState({
       isPopupOpen: true
@@ -103,12 +97,6 @@ class Main extends Component {
     }).catch(error => {
       console.error(error)
     })
-    // let memLi = this.state.memberLists;
-    // memLi.push(this.state.memberInput);
-    // this.setState({
-    //   memberInput: '',
-    //   memberLists: memLi
-    // });
   }
 
   onLoadJandi() {
@@ -116,11 +104,11 @@ class Main extends Component {
     axios.get(server_path + '/main', { withCredentials: true }).then(res => {
 
       console.log(res.data);
-      this.props.setProjects(res.data);
+      //this.props.setProjects(res.data);
       let project;
       if (this.props.projects && this.props.projects.length > 0) {
         project = this.props.projects.filter(item => {
-          return item.id == this.state.projectId;
+          return item.id === this.state.projectId;
         });
         if (project.length > 0) {
           this.setState({
@@ -139,7 +127,7 @@ class Main extends Component {
 
   onCreateProject() {
     let { cookies } = this.props;
-    let { projectNameInput, memberLists } = this.state;
+    let { projectNameInput } = this.state;
     if (projectNameInput === "") {
       this.setState({
         errorMessage: "프로젝트 이름을 지정해주세요"
@@ -188,7 +176,7 @@ class Main extends Component {
             </div>
             <ul className="Main-projectList" >
               {
-                this.props.projects.map(item => {
+                Array.isArray(this.props.projects) && this.props.projects.map(item => {
                   return (
                     <li key={item.id} >
                       <Link to={`/project/${item.id}`}>
@@ -276,4 +264,4 @@ const mapDispatchToProps = (dispatch) => ({
   setProjects: (projectLists) => dispatch(setProjects(projectLists))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Main));
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
