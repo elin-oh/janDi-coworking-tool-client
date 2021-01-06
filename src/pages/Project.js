@@ -25,6 +25,7 @@ class Project extends Component {
       projectNameInput: "",
       project: {}
     }
+    this.jandiEl = React.createRef();
   }
 
   componentDidMount() {
@@ -48,6 +49,9 @@ class Project extends Component {
         })
       }
     }
+
+    //scroll
+    this.jandiEl.current.scrollLeft = this.jandiEl.current.scrollWidth - this.jandiEl.current.offsetWidth;
 
     let day = this.getToday();
     this.props.setTodosDate(day);
@@ -280,13 +284,13 @@ class Project extends Component {
             <h4>{this.state.project.projectName}</h4>
             {/* 잔디밭 */}
             <div className="Main-JandiGroundWrapper">
-              <div className="Main-JandiGround">
+              <div className="Main-JandiGround" ref={this.jandiEl}>
                 <JandiGround todoLists={this.state.project} method={this.handleClickTodo.bind(this, this.state.project)} />
               </div>
             </div>
             <TodoInput member={this.state.member} onOpenModifyPopup={this.onOpenPopup.bind(this)} projectId={this.state.projectId} onLoadData={this.onHandleDataTodo.bind(this)} location={this.props.location}/>
             <TodoListWrapper onDeleteTodo={this.handleDeleteTodo.bind(this)} onLoadData={this.onLoadData.bind(this)} />
-          </div>{/* App-contents */}
+          </div>
           {this.state.isPopupOpen ? (
             <Popup open onClosePopup={this.handleClosePopup.bind(this)}>
               <h3>프로젝트 수정</h3>
