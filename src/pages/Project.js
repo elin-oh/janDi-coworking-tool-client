@@ -31,15 +31,12 @@ class Project extends Component {
   componentDidMount() {
 
     let projectId = this.props.location.pathname.split('/')[2];
-    console.log(projectId)
     //프로젝트 설정
     let project;
     if (this.props.projects && this.props.projects.length > 0) {
       project = this.props.projects.filter(item => {
-        console.log(item.id == projectId)
         return Number(item.id) === Number(projectId);
       });
-      console.log(project);
       if (project.length > 0) {
         this.setState({
           projectId,
@@ -141,7 +138,6 @@ class Project extends Component {
   }
   handleClickTodo(project, e) {
     axios.get(server_path + '/projectinfo?pid=' + project.id + '&day=' + e.target.dataset.key, { withCredentials: true }).then(res => {
-      console.log(res.data);
       let filteredMember = res.data.member.filter(item => item !== this.props.userEmail);
       let data = res.data;
       data.member = filteredMember;
@@ -233,7 +229,6 @@ class Project extends Component {
   onLoadJandi() {
     let { cookies } = this.props;
     axios.get(server_path + '/main', { withCredentials: true }).then(res => {
-      console.log(res.data);
       this.props.setProjects(res.data);
       let project;
       if (this.props.projects && this.props.projects.length > 0) {
@@ -258,7 +253,6 @@ class Project extends Component {
   deleteProject() {
     let { cookies } = this.props;
     let id = this.state.projectId;
-    console.log(id)
     axios.delete(server_path + '/projectdelete', {
       data: {
         id
