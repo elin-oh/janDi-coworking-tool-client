@@ -29,6 +29,11 @@ class Project extends Component {
   }
 
   componentDidMount() {
+    axios.get(server_path + '/main', {withCredentials: true })
+    .then(res => {
+      this.props.setProjects(res.data);
+    }).catch(error => {
+    })
     //this.props.initTodos();
     let projectId = this.props.location.pathname.split('/')[2];
     //프로젝트 설정
@@ -154,19 +159,6 @@ class Project extends Component {
       })
     }
 
-  }
-  handleDeleteTodo(id) {
-    axios.delete(server_path + '/todolistdelete', {
-      data: {
-        id
-      },
-      withCredentials: true
-    }).then(res => {
-    }).catch(error => {
-      if (error.response && error.response.status === 401) {
-        this.props.history.push('/login');
-      }
-    })
   }
 
   deleteProject() {

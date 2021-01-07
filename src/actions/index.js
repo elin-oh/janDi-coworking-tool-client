@@ -52,42 +52,13 @@ export const setToday = (today)=>{
     today
   }
 }
-// export const setTodos = (todosInfo) => {
-//   return ({
-//     type: types.SET_TODOS,
-//     todosInfo
-//   })
-// };
 
-// export const setTodoDate = (date) => {
-//   return ({
-//     type: types.SET_TODO_DATE,
-//     date
-//   })
-// };
-
-
-// export const setSortList = (nameList, sortedTodoLists) => {
-//   return ({
-//     type: types.SET_SORT_LIST,
-//     nameList,
-//     sortedTodoLists
-//   })
-// };
-
-// export const addTodoList = (todolist) => {
-//   return ({
-//     type: types.ADD_TODO_LIST,
-//     todolist
-//   })
-// };
-
-// export const deleteTodo = (id) => {
-//   return ({
-//     type: types.DELETE_TODO,
-//     id
-//   })
-// };
+export const deleteTodo = (id)=>{
+  return {
+    type: types.DELETE_TODO,
+    id
+  }
+}
 
 export const initTodos = ()=>{
   return {

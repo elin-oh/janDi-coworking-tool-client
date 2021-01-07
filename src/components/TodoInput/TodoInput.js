@@ -4,8 +4,7 @@ import axios from 'axios';
 import { server_path } from 'modules/path';
 import styles from './TodoInput.scss';
 import classNames from 'classnames/bind';
-
-
+import { addTodoLists } from 'actions';
 
 const cx = classNames.bind(styles);
 class TodoInput extends Component {
@@ -50,12 +49,20 @@ class TodoInput extends Component {
       body: inputTodo
     }
     axios.post(server_path + '/todolistpost', options, { withCredentials: true }).then(res => {
+      this.props.addTodoLists(res.data);
       this.setState({
         inputTodo: ""
       });
     }).catch((err)=>{
       console.log(err);
     })
+  }
+  
+  handleKeyup(e){
+    if(e.keyCode === 13){
+      console.log('enter');
+      this.addTodos();
+    }
   }
 
   render() {
@@ -75,7 +82,7 @@ class TodoInput extends Component {
           </div>
         ) : null}
         <div className={cx('inputWrapTodoInput')}>
-          <input type="text" placeholder="오늘의 할 일을 입력하세요" value={this.state.inputTodo} onChange={this.onChangeInput.bind(this)} name="inputTodo" />
+          <input type="text" placeholder="오늘의 할 일을 입력하세요" value={this.state.inputTodo} onChange={this.onChangeInput.bind(this)} name="inputTodo"  onKeyUp={this.handleKeyup.bind(this)}/>
           <div className={cx('btnCreateTodo')} onClick={this.addTodos.bind(this)}>
             추가
           </div>
@@ -91,6 +98,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  addTodoLists: (todo)=>dispatch(addTodoLists(todo))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoInput);
