@@ -4,7 +4,7 @@ import { generateJandi } from 'modules/generateDayBlock';
 import JandiHana from 'components/JandiHana';
 import classNames from 'classnames/bind';
 import styles from './JandiGround.scss';
-
+import {setDate} from 'actions';
 const cx = classNames.bind(styles);
 
 class JandiGround extends PureComponent {
@@ -13,11 +13,20 @@ class JandiGround extends PureComponent {
     super(props)
     let JandiDayList = generateJandi();
     this.state = {
-      jandiDay: JandiDayList
+      jandiDay: JandiDayList,
+      project:{}
     }
   }
 
-  componentDidMount() {
+  componentDidMount() { 
+    
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+  }
+  
+  loadDayTodoList(item){
+    this.props.setDate(item);
   }
 
   render() {
@@ -26,9 +35,8 @@ class JandiGround extends PureComponent {
         {
           this.state.jandiDay &&
           this.state.jandiDay.map(item => {
-            
             if(this.props.todoLists[item]){
-              return (<div key={item}><JandiHana dataKey={item} count={this.props.todoLists[item]} key={item} /></div>)
+              return (<div key={item} onClick={this.loadDayTodoList.bind(this, item)}><JandiHana dataKey={item} count={this.props.todoLists[item]} key={item} /></div>)
             }else{
               return (<JandiHana dataKey={item} key={item} />)
             }
@@ -41,11 +49,11 @@ class JandiGround extends PureComponent {
 
 
 const mapStateToProps = state => ({
-  // blabla: state.blabla,
+  project: state.projectsReducer.project
 });
 
 const mapDispatchToProps = dispatch => ({
-  // fnBlaBla: () => dispatch(action.name()),
+  setDate: (date)=> dispatch(setDate(date))
 });
 
 export default connect(

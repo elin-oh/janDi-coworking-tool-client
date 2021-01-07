@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Header from 'components/Header';
 import { connect } from 'react-redux';
-import { withCookies, Cookies } from 'react-cookie';
 import classNames from 'classnames/bind';
 import styles from 'styles/MyPage.css';
 import MiniButton from 'components/MiniButton';
@@ -9,14 +8,13 @@ import Popup from 'components/Popup';
 import Button from 'components/Button';
 import PersonalJandiGround from 'containers/PersonalJandiGround';
 import axios from 'axios';
-import { setCount, setUser, setTodos } from 'actions';
+import { setCount, setUser } from 'actions';
 import { server_path } from 'modules/path.js';
 
 const cx = classNames.bind(styles);
 class Mypage extends Component {
   constructor(props) {
     super(props)
-    const { cookies } = props;
     this.state = {
       isReadonlyUserName: true,
       isPopupOpen: false,
@@ -255,7 +253,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   setCount: (todoDoneCount, todoTotalCount) => dispatch(setCount(todoDoneCount, todoTotalCount)),
   setUser: (email, passLen, userName) => dispatch(setUser(email, passLen, userName)),
-  setTodos: (todosInfo) => dispatch(setTodos(todosInfo)),
+  //setTodos: (todosInfo) => dispatch(setTodos(todosInfo)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withCookies(Mypage));
+export default connect(mapStateToProps, mapDispatchToProps)(Mypage);

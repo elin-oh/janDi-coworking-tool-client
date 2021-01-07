@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styles from './TodoItem.scss';
 import classNames from 'classnames/bind';
-import { deleteTodo } from 'actions';
+// import { deleteTodo } from 'actions';
 import axios from 'axios';
 import { server_path } from 'modules/path';
 const cx = classNames.bind(styles);
@@ -25,7 +25,7 @@ class TodoItem extends Component {
           <label htmlFor={this.props.todoList.id}></label>
           <span>{this.props.todoList.body}</span>
         </div>
-        <div className={cx('btnDeleteTodo')} onClick={this.props.onDeleteTodo.bind(this, this.props.todoList.id)}>
+        <div className={cx('btnDeleteTodo')}>
           <img src="/img/btn_delete_member.png" alt="투두삭제" className="btnDelete" />
         </div>
       </div >
@@ -34,10 +34,8 @@ class TodoItem extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  // works: state.workReducer.works,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  deleteTodo: (id) => dispatch(deleteTodo(id))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(TodoItem);

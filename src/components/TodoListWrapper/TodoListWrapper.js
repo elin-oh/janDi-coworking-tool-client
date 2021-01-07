@@ -5,6 +5,7 @@ import classNames from 'classnames/bind';
 //import TodoLists from 'components/TodoLists';
 import TodoItem from 'components/TodoItem';
 
+
 const cx = classNames.bind(styles);
 
 class TodoListWrapper extends Component {
@@ -15,13 +16,13 @@ class TodoListWrapper extends Component {
     }
   }
   render() {
-    if (this.props.todolists && this.props.todolists.length > 0) {
+    if (this.props.project[this.props.targetDate] && this.props.project[this.props.targetDate].length > 0) {
       return (
         <div className={cx('TodoListWrapper')}>
           {
-            this.props.todolists.map(item => {
+            this.props.project[this.props.targetDate].map(item => {
               return (
-                <TodoItem todoList={item} key={item.id} onDeleteTodo={this.props.onDeleteTodo} onLoadData={this.props.onLoadData} />
+                <TodoItem todoList={item} key={item.id}/>
               )
             })
           }
@@ -39,7 +40,8 @@ class TodoListWrapper extends Component {
 
 
 const mapStateToProps = (state) => ({
-  todolists: state.todoReducer.todosInfo.project.todolists || [],
+  targetDate: state.projectsReducer.targetDate,
+  project: state.projectsReducer.project
 });
 
 const mapDispatchToProps = (dispatch) => ({

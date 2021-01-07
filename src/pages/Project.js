@@ -11,7 +11,7 @@ import styles from 'styles/Project.css';
 import Popup from 'components/Popup';
 import Button from 'components/Button';
 import MiniButton from 'components/MiniButton';
-import { setTodos, setTodoDate, setProjects } from 'actions';
+import { initTodos, setProjects, setProject, setDate } from 'actions';
 
 const cx = classNames.bind(styles);
 
@@ -29,7 +29,7 @@ class Project extends Component {
   }
 
   componentDidMount() {
-
+    //this.props.initTodos();
     let projectId = this.props.location.pathname.split('/')[2];
     //프로젝트 설정
     let project;
@@ -38,46 +38,42 @@ class Project extends Component {
         return Number(item.id) === Number(projectId);
       });
       if (project.length > 0) {
-        this.setState({
-          projectId,
-          projectNameInput: project[0].projectName,
-          memberLists: this.props.member,
-          project: project[0],
-        })
+        this.props.setProject(project[0]);
       }
     }
-
-    //scroll
     this.jandiEl.current.scrollLeft = this.jandiEl.current.scrollWidth - this.jandiEl.current.offsetWidth;
+    
+  }
 
-    let day = this.getToday();
-    this.props.setTodosDate(day);
-
-
-    axios.get(server_path + '/projectinfo?pid=' + projectId + '&day=' + this.props.targetDate, { withCredentials: true }).then(res => {
-      let filteredMember = res.data.member.filter(item => item !== this.props.userEmail);
-      let data = res.data;
-      data.member = filteredMember;
-      this.props.setTodos(data);
-    }).catch(error => {
-      if (error.response && error.response.status === 401) {
-        this.props.history.push('/login');
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.projects !== this.props.projects) {
+      let projectId = this.props.location.pathname.split('/')[2];
+      let project;
+      if (this.props.projects && this.props.projects.length > 0) {
+        project = this.props.projects.filter(item => {
+          return Number(item.id) === Number(projectId);
+        });
+        if (project.length > 0) {
+          this.props.setProject(project[0]);
+        }
       }
+    }
+  }
+  
+  axiosProjects(){
+    axios.get(server_path + '/main', {withCredentials: true })
+    .then(res => {
+      this.props.setProjects(res.data);
+    }).catch(error => {
     })
   }
-  getToday() {
-    let date = new Date();
-    let year = date.getFullYear();
-    let month = ("0" + (1 + date.getMonth())).slice(-2);
-    let day = ("0" + date.getDate()).slice(-2);
 
-    return year + '-' + month + '-' + day;
-  }
   onOpenPopup() {
     this.setState({
       isPopupOpen: true
     })
   }
+
   handleClosePopup(e) {
     this.setState({
       isPopupOpen: false
@@ -95,6 +91,7 @@ class Project extends Component {
       [name]: value
     })
   }
+
   onClickBtnInvite(e) {
     let { cookies } = this.props;
     this.setState({
@@ -113,6 +110,7 @@ class Project extends Component {
       })
       return;
     }
+
     axios.post(server_path + '/usercheck', {
       email: this.state.memberInput
     }, { withCredentials: true }).then(res => {
@@ -136,28 +134,7 @@ class Project extends Component {
       }
     })
   }
-  handleClickTodo(project, e) {
-    axios.get(server_path + '/projectinfo?pid=' + project.id + '&day=' + e.target.dataset.key, { withCredentials: true }).then(res => {
-      let filteredMember = res.data.member.filter(item => item !== this.props.userEmail);
-      let data = res.data;
-      data.member = filteredMember;
-      this.props.setTodos(data);
-
-
-    }).catch(error => {
-
-    })
-  }
-  deleteMember(index) {
-    let memLi = this.state.memberLists;
-    memLi.splice(index, 1);
-    this.setState({
-      memberLists: memLi
-    })
-  }
-
   onModifyProject() {
-    let { cookies } = this.props;
     let { projectNameInput } = this.state;
     if (projectNameInput === "") {
       this.setState({
@@ -173,85 +150,26 @@ class Project extends Component {
         this.setState({
           isPopupOpen: false
         });
-        this.onLoadJandi();
       }).catch(error => {
-        if (error.response && error.response.status === 401) {
-          //쿠키삭제
-          cookies.remove('userId');
-          this.props.history.push('/login');
-        }
       })
     }
 
   }
   handleDeleteTodo(id) {
-    let { cookies } = this.props;
     axios.delete(server_path + '/todolistdelete', {
       data: {
         id
       },
       withCredentials: true
     }).then(res => {
-      this.onLoadData();
-      this.onLoadJandi();
     }).catch(error => {
       if (error.response && error.response.status === 401) {
-        //쿠키삭제
-        cookies.remove('userId');
-        this.props.history.push('/login');
-      }
-    })
-  }
-
-  onHandleDataTodo() {
-    this.onLoadData();
-    this.onLoadJandi()
-  }
-
-  onLoadData() {
-    let { cookies } = this.props;
-    let projectId = this.props.location.pathname.split('/')[2];
-    axios.get(server_path + '/projectinfo?pid=' + projectId + '&day=' + this.props.targetDate, { withCredentials: true }).then(res => {
-      let filteredMember = res.data.member.filter(item => item !== this.props.userEmail);
-      let data = res.data;
-      data.member = filteredMember;
-      this.props.setTodos(data);
-    }).catch(error => {
-      console.log(error);
-      if (error.response && error.response.status === 401) {
-        //쿠키삭제
-        cookies.remove('userId');
-        this.props.history.push('/login');
-      }
-    })
-  }
-
-  onLoadJandi() {
-    let { cookies } = this.props;
-    axios.get(server_path + '/main', { withCredentials: true }).then(res => {
-      this.props.setProjects(res.data);
-      let project;
-      if (this.props.projects && this.props.projects.length > 0) {
-        project = this.props.projects.filter(item => {
-          return item.id === this.state.projectId;
-        });
-        if (project.length > 0) {
-          this.setState({
-            project: project[0],
-          })
-        }
-      }
-    }).catch(error => {
-      if (error.response && error.response.status === 401) {
-        //쿠키삭제
-        cookies.remove('userId');
         this.props.history.push('/login');
       }
     })
   }
 
   deleteProject() {
-    let { cookies } = this.props;
     let id = this.state.projectId;
     axios.delete(server_path + '/projectdelete', {
       data: {
@@ -261,11 +179,7 @@ class Project extends Component {
     }).then(res => {
       this.props.history.push('/');
     }).catch(error => {
-      if (error.response && error.response.status === 401) {
-        //쿠키삭제
-        cookies.remove('userId');
-        this.props.history.push('/login');
-      }
+      
     })
   }
 
@@ -275,20 +189,19 @@ class Project extends Component {
         <div className="mb-view">
           <Header />
           <div className="App-contents Project">
-            <h4>{this.state.project.projectName}</h4>
+            <h4>{this.props.project.projectName}</h4>
             {/* 잔디밭 */}
             <div className="Main-JandiGroundWrapper">
               <div className="Main-JandiGround" ref={this.jandiEl}>
-                <JandiGround todoLists={this.state.project} method={this.handleClickTodo.bind(this, this.state.project)} />
+                <JandiGround todoLists={this.props.project}/>
               </div>
             </div>
-            <TodoInput member={this.state.member} onOpenModifyPopup={this.onOpenPopup.bind(this)} projectId={this.state.projectId} onLoadData={this.onHandleDataTodo.bind(this)} location={this.props.location}/>
-            <TodoListWrapper onDeleteTodo={this.handleDeleteTodo.bind(this)} onLoadData={this.onLoadData.bind(this)} />
+            <TodoInput member={this.state.member} onOpenModifyPopup={this.onOpenPopup.bind(this)} projectId={this.state.projectId} location={this.props.location}/>
+            <TodoListWrapper/>
           </div>
           {this.state.isPopupOpen ? (
             <Popup open onClosePopup={this.handleClosePopup.bind(this)}>
               <h3>프로젝트 수정</h3>
-
               <ul className="Project-modifyPoject">
                 <li>
                   <h4>프로젝트 이름</h4>
@@ -306,7 +219,6 @@ class Project extends Component {
                       <MiniButton classList={['posRel']}>초대</MiniButton>
                     </div>
                   </div>
-
                   {
                     this.state.memberLists.length > 0 &&
                     <ul className="addedMemberList">
@@ -325,13 +237,11 @@ class Project extends Component {
                       }
                     </ul>
                   }
-
                   {
                     this.state.errorMessage ? (
                       <span className="warning_text">{this.state.errorMessage}</span>
                     ) : null
                   }
-
                   <div className="txt_gray_underline" onClick={this.deleteProject.bind(this)}>프로젝트를 삭제하시겠습니까?</div>
 
                   <div className={cx('btnSubmitModifyProject')} onClick={this.onModifyProject.bind(this)}>
@@ -347,19 +257,16 @@ class Project extends Component {
   }
 }
 
-
 const mapStateToProps = (state) => ({
   projects: state.projectsReducer.projects,
-  userEmail: state.userReducer.email,
-  member: state.todoReducer.todosInfo.member,
-  targetDate: state.todoReducer.date,
-  todolists: state.todoReducer.todosInfo.project.todolists || [],
+  project: state.projectsReducer.project,
+  userEmail: state.userReducer.email
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setTodos: (todosInfo) => dispatch(setTodos(todosInfo)),
-  setTodosDate: (date) => dispatch(setTodoDate(date)),
-  setProjects: (projectLists) => dispatch(setProjects(projectLists))
+  setProject: (project) => dispatch(setProject(project)),
+  setProjects: (projectLists) => dispatch(setProjects(projectLists)),
+  initTodos: ()=>dispatch(initTodos())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Project);

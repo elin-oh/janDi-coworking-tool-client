@@ -4,7 +4,6 @@ import axios from 'axios';
 import { server_path } from 'modules/path';
 import styles from './TodoInput.scss';
 import classNames from 'classnames/bind';
-import { addTodoList } from 'actions';
 
 
 
@@ -21,11 +20,6 @@ class TodoInput extends Component {
   }
 
   componentDidMount() {
-    
-    let devided = this.props.location.pathname.split('/');
-    this.setState({
-      projectId:Number(devided[2])
-    })
   }
   
   onChangeInput(e) {
@@ -49,34 +43,24 @@ class TodoInput extends Component {
   }
 
   addTodos() {
-    let { targetMember, inputTodo } = this.state;
-
+    let { inputTodo } = this.state;
     let options = {};
-    if (targetMember === "") {
-      options = {
-        projectId: this.state.projectId,
-        body: inputTodo
-      }
-    } else {
-      options = {
-        projectId: this.props.projectId,
-        body: inputTodo
-      }
+    options = {
+      projectId: this.props.project.id,
+      body: inputTodo
     }
     axios.post(server_path + '/todolistpost', options, { withCredentials: true }).then(res => {
       this.setState({
         inputTodo: ""
-      })
-
-      this.props.onLoadData();
+      });
+    }).catch((err)=>{
+      console.log(err);
     })
   }
 
   render() {
     return (
       <div className={cx("TodoInput")}>
-
-        {/* 관리자한테만 보이는 라인 */}
         {this.props.isAdmin ? (
           <div className={cx('adminSelection')}>
             {/* <select onChange={this.selectMember.bind(this)}>
@@ -103,13 +87,10 @@ class TodoInput extends Component {
 
 
 const mapStateToProps = (state) => ({
-  // userName: state.userReducer.userName,
-  // member: state.todoReducer.todosInfo.member,
-  isAdmin: state.todoReducer.todosInfo.project.adminUserId
+  project: state.projectsReducer.project
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  addTodoList: (todolist) => dispatch(addTodoList(todolist))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoInput);

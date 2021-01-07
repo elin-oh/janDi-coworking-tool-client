@@ -10,7 +10,7 @@ import axios from 'axios';
 import classNames from 'classnames/bind';
 import styles from '../styles/Main.css';
 import { server_path } from 'modules/path.js';
-import { setProjects } from 'actions';
+import { setProjects, setDate, setToday } from 'actions';
 const cx = classNames.bind(styles);
 
 class Main extends Component {
@@ -27,11 +27,13 @@ class Main extends Component {
   }
 
   componentDidMount() {
-    console.log('mount');
+    //set Date on Redux
+    let day = this.getToday();
+    this.props.setDate(day);
+    this.props.setToday(day);
 
     axios.get(server_path + '/main', {withCredentials: true })
     .then(res => {
-      console.log(res);
       this.props.setProjects(res.data);
     }).catch(error => {
     })
@@ -44,6 +46,15 @@ class Main extends Component {
   }
   componentDidUpdate() {
 
+  }
+
+  getToday() {
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = ("0" + (1 + date.getMonth())).slice(-2);
+    let day = ("0" + date.getDate()).slice(-2);
+    return year + '-' + month + '-' + day;
+    //date추가해야함
   }
   
   onOpenPopup() {
@@ -99,34 +110,7 @@ class Main extends Component {
     })
   }
 
-  onLoadJandi() {
-    let { cookies } = this.props;
-    axios.get(server_path + '/main', { withCredentials: true }).then(res => {
-
-      console.log(res.data);
-      //this.props.setProjects(res.data);
-      let project;
-      if (this.props.projects && this.props.projects.length > 0) {
-        project = this.props.projects.filter(item => {
-          return item.id === this.state.projectId;
-        });
-        if (project.length > 0) {
-          this.setState({
-            project: project[0],
-          })
-        }
-      }
-    }).catch(error => {
-      if (error.response && error.response.status === 401) {
-        //쿠키삭제
-        cookies.remove('userId');
-        this.props.history.push('/login');
-      }
-    })
-  }
-
   onCreateProject() {
-    let { cookies } = this.props;
     let { projectNameInput } = this.state;
     if (projectNameInput === "") {
       this.setState({
@@ -143,14 +127,9 @@ class Main extends Component {
           isPopupOpen: false
         });
 
-        this.onLoadJandi();
 
       }).catch(error => {
-        if (error.response && error.response.status === 401) {
-          //쿠키삭제
-          cookies.remove('userId');
-          this.props.history.push('/login');
-        }
+        console.log(error);
       })
     }
 
@@ -181,12 +160,12 @@ class Main extends Component {
                     <li key={item.id} >
                       <Link to={`/project/${item.id}`}>
                         <h4>{item.projectName}</h4>
-                      </Link>
-                      <div className="Main-JandiGroundWrapper">
-                        <div className="Main-JandiGround" ref={(el) => { this.jandiEl[item.id] = el }} >
-                          <JandiGround todoLists={item} />
+                        <div className="Main-JandiGroundWrapper">
+                          <div className="Main-JandiGround" ref={(el) => { this.jandiEl[item.id] = el }} >
+                            <JandiGround todoLists={item}/>
+                          </div>
                         </div>
-                      </div>
+                      </Link>
                     </li>
                   )
                 })
@@ -256,12 +235,13 @@ class Main extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  // works: state.workReducer.works,
   projects: state.projectsReducer.projects
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setProjects: (projectLists) => dispatch(setProjects(projectLists))
+  setProjects: (projectLists) => dispatch(setProjects(projectLists)),
+  setDate: (date)=> dispatch(setDate(date)),
+  setToday: (today)=> dispatch(setToday(today))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
