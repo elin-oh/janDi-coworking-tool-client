@@ -183,8 +183,18 @@ class Project extends Component {
           <div className="App-contents Project">
             <h4>{this.props.project.projectName}</h4>
             {/* 잔디밭 */}
-            <div className="Main-JandiGroundWrapper">
+            <div className="Main-JandiGroundWrapper project">
+              <ul className={cx('dateList')}>
+                <li>Sun</li>
+                <li>Mon</li>
+                <li>TUE</li>
+                <li>WED</li>
+                <li>THU</li>
+                <li>FRI</li>
+                <li>SAT</li>
+              </ul>
               <div className="Main-JandiGround" ref={this.jandiEl}>
+              
                 <JandiGround todoLists={this.props.project}/>
               </div>
             </div>

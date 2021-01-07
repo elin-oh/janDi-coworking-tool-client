@@ -14,16 +14,18 @@ class JandiGround extends PureComponent {
     let JandiDayList = generateJandi();
     this.state = {
       jandiDay: JandiDayList,
-      project:{}
+      project:{},
+      monthList:[]
     }
   }
 
   componentDidMount() { 
-    
   }
 
   componentDidUpdate(prevProps, prevState) {
   }
+
+
   
   loadDayTodoList(item){
     this.props.setDate(item);

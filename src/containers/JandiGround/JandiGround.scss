@@ -1,7 +1,11 @@
 /* your css code */
 .JandiGroundWrapper{
+  position:relative;
   display:flex;
   flex-direction: column;
   height: 85px;
+  margin-top: 5px;
+  margin-left: 15px;
   flex-wrap: wrap;
 }
+
