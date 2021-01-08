@@ -8,8 +8,6 @@ const initialState = {
 function todoController(state = initialState, action) {
   // 레퍼런스 생성
   switch (action.type) {
-    case types.INIT_TODOS:
-      return initialState;
     default:
       return state;
   }

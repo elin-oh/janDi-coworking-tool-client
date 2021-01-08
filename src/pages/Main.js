@@ -10,7 +10,7 @@ import axios from 'axios';
 import classNames from 'classnames/bind';
 import styles from '../styles/Main.css';
 import { server_path } from 'modules/path.js';
-import { setProjects, setDate, setToday } from 'actions';
+import { setProjects, setDate, setToday, initProject } from 'actions';
 const cx = classNames.bind(styles);
 
 class Main extends Component {
@@ -27,6 +27,7 @@ class Main extends Component {
   }
 
   componentDidMount() {
+
     //set Date on Redux
     let day = this.getToday();
     this.props.setDate(day);
@@ -239,6 +240,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  initProject: ()=>dispatch(initProject()),
   setProjects: (projectLists) => dispatch(setProjects(projectLists)),
   setDate: (date)=> dispatch(setDate(date)),
   setToday: (today)=> dispatch(setToday(today))

@@ -5,7 +5,9 @@
   flex-direction: column;
   height: 85px;
   margin-top: 5px;
-  margin-left: 15px;
   flex-wrap: wrap;
 }
 
+:global .Main-JandiGroundWrapper.project :local .JandiGroundWrapper{
+  margin-left: 15px;
+}

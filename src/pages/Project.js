@@ -11,7 +11,7 @@ import styles from 'styles/Project.css';
 import Popup from 'components/Popup';
 import Button from 'components/Button';
 import MiniButton from 'components/MiniButton';
-import { initTodos, setProjects, setProject, setDate } from 'actions';
+import { initProject, setProjects, setProject, setDate } from 'actions';
 
 const cx = classNames.bind(styles);
 
@@ -268,7 +268,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   setProject: (project) => dispatch(setProject(project)),
   setProjects: (projectLists) => dispatch(setProjects(projectLists)),
-  initTodos: ()=>dispatch(initTodos())
+  initProject: ()=>dispatch(initProject())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Project);

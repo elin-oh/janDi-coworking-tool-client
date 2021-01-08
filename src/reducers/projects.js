@@ -10,6 +10,8 @@ const initialState = {
 function projectsController(state = initialState, action) {
   // 레퍼런스 생성
   switch (action.type) {
+    case types.INIT_PROJECT:
+      return initialState;
     case types.SET_PROJECTS:
       return {
         ...state,
@@ -47,6 +49,20 @@ function projectsController(state = initialState, action) {
         project:{
           ...state.project,
           [state.targetDate]:state.project[state.targetDate].filter(item=>item.id !== action.id)
+        }
+      }
+    case types.MODIFY_TODO_CHECK:
+      
+      return {
+        ...state,
+        project:{
+          ...state.project,
+          [state.targetDate]:state.project[state.targetDate].map(item=>{
+            if(item.id===action.id){
+              item.IsChecked = action.checked;
+            }
+            return item;
+          })
         }
       }
     default:

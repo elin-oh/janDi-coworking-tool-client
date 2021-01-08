@@ -9,6 +9,7 @@ export const SET_DATE = "SET_DATE";
 export const ADD_TODO_LISTS = "ADD_TODO_LISTS";
 export const SET_TODAY = "SET_TODAY";
 export const DELETE_TODO = "DELETE_TODO";
+export const MODIFY_TODO_CHECK = "MODIFY_TODO_CHECK";
 
-export const INIT_TODOS = "INIT_TODOS";
+export const INIT_PROJECT = "INIT_PROJECT";
 export const SET_PROJECT = "SET_PROJECT";

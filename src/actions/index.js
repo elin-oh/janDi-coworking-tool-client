@@ -60,9 +60,18 @@ export const deleteTodo = (id)=>{
   }
 }
 
-export const initTodos = ()=>{
+export const modifyTodoCheck = (id,checked)=>{
   return {
-    type: types.INIT_TODOS
+    type: types.MODIFY_TODO_CHECK,
+    id,
+    checked
   }
 }
+
+export const initProject = ()=>{
+  return {
+    type: types.INIT_PROJECT
+  }
+}
+
 
