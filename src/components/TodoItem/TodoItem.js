@@ -21,6 +21,15 @@ class TodoItem extends Component {
       todoList:this.props.todoList
     })
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.todoList !== this.props.todoList) {
+      this.setState({
+        todoList:this.props.todoList
+      })
+    }
+  }
+  
   
 
   changeCheck(id, e) {
